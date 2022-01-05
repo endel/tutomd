@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+:root {
+  --step-margin: 7.5em;
+}
+
 
 /* CSS RESET */
 html { box-sizing: border-box; font-size: 16px; } *, *:before, *:after { box-sizing: inherit; } body, h1, h2, h3, h4, h5, h6, p, ol, ul { margin: 0; padding: 0; font-weight: normal; } ol, ul { list-style: none; } img { max-width: 100%; height: auto; }
@@ -6,20 +11,61 @@ html { box-sizing: border-box; font-size: 16px; } *, *:before, *:after { box-siz
 body {
   font-family: 'Inter', sans-serif;
   font-size: 18px;
+  color: rgba(0, 0, 0, 0.87);
+  background: #fafafa;
 }
 
 a { color: rgb(33, 150, 243); }
 
-h1, h2 { font-size: 24px; }
-h1, h2 { margin-bottom: 0.5em; }
+/* titles */
+h1, h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
 h1:not(:first-child), h2:not(:first-child) {
   margin-top: 1em;
 }
 
+/* paragraph */
+p { margin-bottom: 24px; }
+p:last-child { margin-bottom: 0; }
+
+/* lists */
+ul {
+  list-style: none;
+  margin: 1.5em 1.5em 1.5em 2em;
+}
+
+ul li {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+ul li::before {
+  content: "";
+  position: absolute;
+  top: 6px ;
+  left: -1.2em;
+  width: 10px;
+  height: 10px;
+  background-color: #000;
+  border-radius: 100%;
+}
+
+/* quotes */
+blockquote {
+  background: rgb(235, 235, 235);
+  padding: 1em;
+  border-left: 4px solid rgb(146, 206, 255);
+}
+
+/* summary / header */
 section:first-child {
   background: #1a1a1a;
   color: rgb(166, 166, 166);
   line-height: 1.6em;
+  padding: calc(var(--step-margin) / 2) var(--step-margin);
 }
 
 section:first-child h1, section:first-child h2 {
@@ -35,25 +81,35 @@ section {
   padding: 1.5em;
 }
 
-section ul {
-  list-style: none;
-  margin: 1.5em 1.5em 1.5em 2em;
+/* first step box */
+section.step:nth-child(2) {
+  margin-top: calc(var(--step-margin) * 0.7);
 }
 
-section ul li {
-  position: relative;
-  margin-bottom: 12px;
+/* all step boxes */
+section.step {
+  margin-left: var(--step-margin);
+  margin-right: var(--step-margin);
+  padding: 2em;
+  border-radius: 0.2em;
+  box-shadow: 0 5px 10px 0 rgb(0 0 0 / 10%);
+  font-size: 16px;
+  line-height: 24px;
+  color: rgb(51, 51, 51);
+  background-color: #fff;
 }
 
-section ul li::before {
-  content: "";
-  position: absolute;
-  top: 6px ;
-  left: -1.2em;
-  width: 10px;
-  height: 10px;
-  background-color: #000;
-  border-radius: 100%;
+/* last step box */
+section.step.final { margin-bottom: 5em; }
+
+/* step titles */
+section.step h1 {
+  font-size: 48px;
+  line-height: 64px;
+}
+
+section.step ul {
+  margin-left: 3.5em;
 }
 
 section + .step-separator {

@@ -1,4 +1,4 @@
-# Third portion of the tutorial...
+# Configure your visual script with variables
 
 Variables are essential programming tools. With them, you can store, calculate, and manipulate the input values to the units of your scripts.
 

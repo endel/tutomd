@@ -47,13 +47,17 @@ cli
 
     files.forEach((file, i) => {
       const filename = path.basename(file, ".md");
+      console.log({ filename });
 
       const currentSidebar = JSON.parse(JSON.stringify(sidebar));
       currentSidebar[i].sections = [];
 
       const contents = fileContents[file];
-      const sections = contents.split("---")
+      const sections = contents.split("---").map(content => content.trim());
       const renderedSections = sections.map((section, j) => {
+        // early return if no content
+        if (section.length === 0) { return ""; }
+
         let rendered = md.render(section);
 
         if (j > 0) { // no need to
@@ -71,9 +75,6 @@ cli
           });
 
         }
-
-        console.log("SECTIONS:", currentSidebar[i].sections)
-
 
         return rendered;
       });

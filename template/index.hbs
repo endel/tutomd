@@ -28,7 +28,7 @@
 
   <main>
     {{#each sections}}
-    <section {{#if @first}} class="summary"{{/if}}>
+    <section class="{{#if @first}} summary {{else}} step {{/if}}">
       {{{ . }}}
 
       {{!-- <label for=""></label>
@@ -44,6 +44,13 @@
     {{/unless}}
 
     {{/each}}
+
+    <div class="step-separator"></div>
+
+    <section class="step final">
+      <a href="#">Next...</a>
+    </section>
+
   </main>
 
 </body>
