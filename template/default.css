@@ -1,5 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
+/* CSS RESET */
+html { box-sizing: border-box; font-size: 16px; } *, *:before, *:after { box-sizing: inherit; } body, h1, h2, h3, h4, h5, h6, p, ol, ul { margin: 0; padding: 0; font-weight: normal; } ol, ul { list-style: none; } img { max-width: 100%; height: auto; }
+
 body {
   font-family: 'Inter', sans-serif;
+  font-size: 18px;
+}
+
+a { color: rgb(33, 150, 243); }
+
+h1, h2 { font-size: 24px; }
+h1, h2 { margin-bottom: 0.5em; }
+h1:not(:first-child), h2:not(:first-child) {
+  margin-top: 1em;
+}
+
+section:first-child {
+  background: #1a1a1a;
+  color: rgb(166, 166, 166);
+  line-height: 1.6em;
+}
+
+section:first-child h1, section:first-child h2 {
+  color: #fff;
+}
+
+section:first-child ul li::before {
+  background-color: #fff;
+}
+
+section {
+  position: relative;
+  padding: 1.5em;
+}
+
+section ul {
+  list-style: none;
+  margin: 1.5em 1.5em 1.5em 2em;
+}
+
+section ul li {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+section ul li::before {
+  content: "";
+  position: absolute;
+  top: 6px ;
+  left: -1.2em;
+  width: 10px;
+  height: 10px;
+  background-color: #000;
+  border-radius: 100%;
+}
+
+section + .step-separator {
+  height: 80px;
+  width: 2px;
+  display: block;
+  margin: 0 auto;
+  background: rgb(224, 224, 224);
 }

@@ -26,11 +26,25 @@
     {{/each}}
   </aside>
 
-  {{#each sections}}
-  <section {{#if @first}} class="summary"{{/if}}>
-    {{{ . }}}
-  </section>
-  {{/each}}
+  <main>
+    {{#each sections}}
+    <section {{#if @first}} class="summary"{{/if}}>
+      {{{ . }}}
+
+      {{!-- <label for=""></label>
+      <input type="checkbox" />
+      <a href="#" class="button">Mark step as complete</a> --}}
+    </section>
+
+    {{!-- add separator between each step/section --}}
+    {{#unless @first}}
+      {{#unless @last}}
+        <div class="step-separator"></div>
+      {{/unless}}
+    {{/unless}}
+
+    {{/each}}
+  </main>
 
 </body>
 </html>
