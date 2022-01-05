@@ -1,0 +1,22 @@
+{
+  "name": "tutomd",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "bin": "./bin/tutomd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cac": "^6.7.12",
+    "ejs": "^3.1.6",
+    "handlebars": "^4.7.7",
+    "markdown-it": "^12.3.0",
+    "markdown-it-anchor": "^8.4.1",
+    "mkdirp": "^1.0.4",
+    "prismjs": "^1.25.0"
+  }
+}

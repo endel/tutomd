@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="theme.css" />
+  <title>{{ title }}</title>
+</head>
+<body>
+
+  {{!-- Sidebar --}}
+  <aside>
+    {{#each sidebar}}
+      <div>
+        {{title}} {{filename}}
+
+        {{#if sections}}
+          <ul>
+            {{#each sections}}
+              <li><a href="#{{id}}">{{title}}</a></li>
+            {{/each}}
+          </ul>
+        {{/if}}
+      </div>
+    {{/each}}
+  </aside>
+
+  {{#each sections}}
+  <section {{#if @first}} class="summary"{{/if}}>
+    {{{ . }}}
+  </section>
+  {{/each}}
+
+</body>
+</html>
