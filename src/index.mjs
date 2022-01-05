@@ -26,6 +26,7 @@ const cli = cac();
 cli
   .command('generate [...files]', 'Generate tutorial for file')
   .option("--theme <name>", "Theme path", { default: "template/default.css" })
+  .option("--prism-theme <name>", "PrismJS theme", { default: "okaidia" })
   .option("--out <dir>", "Output directory", { default: "output" })
   .action((files, options) => {
     // TODO: copy image and other files.
@@ -109,6 +110,12 @@ cli
      * Copy the CSS theme over
      */
     const themeCSS = fs.readFileSync(options.theme).toString();
+
+    // // Syntax highlight: prism.css + theme file
+    // const prismCSS = fs.readFileSync(path.resolve("node_modules", "prismjs", "themes", "prism.css")).toString();
+    // const prismCSSTheme = fs.readFileSync(path.resolve("node_modules", "prismjs", "themes", `prism-${options.prismTheme}.css`)).toString();
+
+    // fs.writeFileSync(`${options.out}/theme.css`, `${themeCSS}${prismCSS}${prismCSSTheme}`);
     fs.writeFileSync(`${options.out}/theme.css`, themeCSS);
   });
 

@@ -22,6 +22,36 @@ This tutorial will introduce you to the Visual Scripting user interface. You wil
 > This is a quote.
 > A very big quote.
 
+Now let's test code blocks.
+
+```typescript
+class IAmAClass extends Something {
+  constructor() {
+    super();
+  }
+
+  method () {
+    alert("I'm a code block!");
+  }
+}
+```
+
+And here's a Java code block:
+
+```java
+System.WhatIAmIDoing.PrintFLN.IDK.WHO.USES.This.Thing.Anyway?();
+```
+
+```css
+* {
+  font-size: 22px;
+}
+div {
+  float: right;
+}
+```
+
+
 ---
 
 # Welcome to Visual Scripting
