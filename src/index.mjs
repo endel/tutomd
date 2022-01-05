@@ -5,6 +5,9 @@ import markdownIt from "markdown-it";
 import Handlebars from "handlebars";
 import mkdirp from 'mkdirp';
 import markdownItAnchor from "markdown-it-anchor";
+import markdownItIns from "markdown-it-anchor";
+import markdownItMark from "markdown-it-mark";
+import markdownItFootnote from "markdown-it-footnote";
 
 const md = markdownIt({
   html: true,
@@ -14,6 +17,9 @@ const md = markdownIt({
 });
 
 md.use(markdownItAnchor, {});
+md.use(markdownItIns)
+md.use(markdownItMark);
+md.use(markdownItFootnote)
 
 function parseTitle(contents) {
   const tokens = md.parse(contents);
@@ -29,7 +35,12 @@ cli
   .option("--prism-theme <name>", "PrismJS theme", { default: "okaidia" })
   .option("--out <dir>", "Output directory", { default: "output" })
   .action((files, options) => {
-    // TODO: copy image and other files.
+    // copy files (that aren't Markdown) over
+    files.filter(file => !file.endsWith(".md")).forEach(src => {
+      const destiny = path.resolve(options.out, path.basename(src));
+      fs.copyFileSync(src, destiny);
+      console.log("Copying", `'${src}'`, "to", `'${destiny}'`);
+    });
 
     // only consider markdown (.md) files
     files = files.filter(file => file.endsWith(".md"));
@@ -103,7 +114,7 @@ cli
       mkdirp.sync(options.out);
 
       // write html file into the out directory.
-      fs.writeFileSync(`${options.out}/${filename}.html`, html);
+      fs.writeFileSync(path.resolve(options.out, `${filename}.html`) , html);
     });
 
     /**
