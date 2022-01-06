@@ -83,6 +83,7 @@ cli
 
           currentSidebar[i].sections.push({
             title,
+            num: j,
             id: titleToken.attrGet("id")
           });
 
@@ -115,6 +116,9 @@ cli
 
       // write html file into the out directory.
       fs.writeFileSync(path.resolve(options.out, `${filename}.html`) , html);
+
+      // TODO: generate image preview for the section, if none was provided
+
     });
 
     /**

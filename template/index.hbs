@@ -19,13 +19,18 @@
   {{!-- Sidebar --}}
   <aside>
     {{#each sidebar}}
-      <div>
-        {{title}} {{filename}}
-
+      <div class="section{{#if sections}} current{{/if}}">
+        <div class="info">
+          <div class="thumbnail" style="background-image: url({{filename}}.png);"></div>
+          <div class="data">
+            <small>Tutorial</small>
+            <a href="{{filename}}.html">{{title}}</a>
+          </div>
+        </div>
         {{#if sections}}
           <ul>
             {{#each sections}}
-              <li><a href="#{{id}}">{{title}}</a></li>
+              <li><a href="#{{id}}">{{num}} {{title}}</a></li>
             {{/each}}
           </ul>
         {{/if}}
