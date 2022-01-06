@@ -125,13 +125,14 @@ cli
      * Copy the CSS theme over
      */
     const themeCSS = fs.readFileSync(options.theme).toString();
+    const iconsCSS = fs.readFileSync(path.resolve("template", "icons.css")).toString();
 
     // // Syntax highlight: prism.css + theme file
     // const prismCSS = fs.readFileSync(path.resolve("node_modules", "prismjs", "themes", "prism.css")).toString();
     // const prismCSSTheme = fs.readFileSync(path.resolve("node_modules", "prismjs", "themes", `prism-${options.prismTheme}.css`)).toString();
 
-    // fs.writeFileSync(`${options.out}/theme.css`, `${themeCSS}${prismCSS}${prismCSSTheme}`);
-    fs.writeFileSync(`${options.out}/theme.css`, themeCSS);
+    fs.writeFileSync(`${options.out}/theme.css`, `${iconsCSS}${themeCSS}`);
+    // fs.writeFileSync(`${options.out}/theme.css`, themeCSS);
   });
 
 cli.help();

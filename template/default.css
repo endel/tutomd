@@ -7,7 +7,6 @@
   --complete-color: rgb(100, 206, 92);
 }
 
-
 /* CSS RESET */
 html { box-sizing: border-box; font-size: 16px; } *, *:before, *:after { box-sizing: inherit; } body, h1, h2, h3, h4, h5, h6, p, ol, ul { margin: 0; padding: 0; font-weight: normal; } ol, ul { list-style: none; } img { max-width: 100%; height: auto; }
 
@@ -208,6 +207,23 @@ section.step {
   background-color: #fff;
 }
 
+section.step .completion {
+  font-size: 30px;
+  height: 80px;
+  width: 80px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #fff;
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+section.step.complete .completion { background-color: #1fd348; }
+
 /* last step box */
 section.step.final { margin-bottom: 5em; }
 section.step.final h2 {
@@ -220,6 +236,7 @@ section.step.final h2 {
 section.step h1 {
   font-size: 48px;
   line-height: 64px;
+  margin-top: 0; /* FIXME: this is necessary because ".completion" is occupying space (it shouldn't occupy space as it is position:absolute ¯\_(ツ)_/¯ */
 }
 
 section.step ul {
