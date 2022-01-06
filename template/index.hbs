@@ -47,7 +47,9 @@
       <input type="checkbox" />
       <a href="#" class="button">Mark step as complete</a> --}}
 
+      {{#unless @first}}
       <div class="completion ifont ifont-lrn_icon_finish"></div>
+      {{/unless}}
     </section>
 
     {{!-- add separator between each step/section --}}
