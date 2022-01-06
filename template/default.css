@@ -45,28 +45,39 @@ aside a {
   color: inherit;
   text-decoration: none;
 }
-aside a:hover {
-  color: var(--link-color);
-}
 aside .current { color: #fff; } /* highlight current section */
+aside a:hover { color: var(--link-color); }
 
-aside .section {
-  margin-bottom: 1em;
+aside .section { margin-bottom: 1em; }
+aside .section .num {
+  display: inline-block;
+  padding-right: 16px;
+  text-align: right;
+  width: 32px;
 }
-
-aside .section .info {
-  display: flex;
+aside .section .num::before { /* additional "list-style" bullet */
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 22px;
+  border-radius: 100%;
+  background-color: #fff;
+  width: 5px;
+  height: 5px;
 }
+aside .section a:hover .num::before { background-color: var(--link-color); }
 
+aside .section .info { display: flex; }
 aside .section .info .thumbnail {
   border-radius: 0.5em;
-  border: 3px solid var(--complete-color);
   display: inline-block;
   background-position: center;
   background-size: cover;
   width: 46px;
   height: 46px;
 }
+/* complete section! */
+aside .section.complete .info .thumbnail { border: 3px solid var(--complete-color); }
 aside .section .info .data {
   display: inline-block;
   padding: 0.5em 0.7em;
@@ -101,13 +112,12 @@ ul {
   list-style: none;
   margin: 1.5em 1.5em 1.5em 2em;
 }
-
 ul li {
   position: relative;
   margin-bottom: 12px;
 }
 
-ul li::before {
+section ul li::before {
   content: "";
   position: absolute;
   top: 6px ;
