@@ -102,6 +102,11 @@ section.step {
 
 /* last step box */
 section.step.final { margin-bottom: 5em; }
+section.step.final h2 {
+  padding-bottom: 0.5em;
+  font-weight: 500;
+  border-bottom: 1px solid rgb(224, 224, 224);
+}
 
 /* step titles */
 section.step h1 {
