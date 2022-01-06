@@ -27,13 +27,13 @@
             <a href="{{filename}}.html">{{title}}</a>
           </div>
         </div>
-        {{#if sections}}
           <ul>
+          {{#if sections}}
             {{#each sections}}
               <li><a href="#{{id}}"><span class="num">{{num}}</span>{{title}}</a></li>
             {{/each}}
+          {{/if}}
           </ul>
-        {{/if}}
       </div>
     {{/each}}
   </aside>
