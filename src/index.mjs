@@ -19,7 +19,7 @@ const md = markdownIt({
 md.use(markdownItAnchor, {});
 md.use(markdownItIns)
 md.use(markdownItMark);
-md.use(markdownItFootnote)
+// md.use(markdownItFootnote); // why footnotes are not working?
 
 function parseTitle(contents) {
   const tokens = md.parse(contents);
