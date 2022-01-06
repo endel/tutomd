@@ -41,14 +41,19 @@
   <main>
     {{#each sections}}
     <section class="{{#if @first}} summary {{else}} step {{/if}}">
-      {{{ . }}}
-
-      {{!-- <label for=""></label>
-      <input type="checkbox" />
-      <a href="#" class="button">Mark step as complete</a> --}}
+      {{{ rendered }}}
 
       {{#unless @first}}
-      <div class="completion ifont ifont-lrn_icon_finish"></div>
+
+      <input type="checkbox" id="complete-{{ id }}" />
+      <div>
+        <label class="button" for="complete-{{ id }}">
+          <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+          <span class="checked">Mark step as incomplete</span>
+        </label>
+
+        <div class="completion ifont ifont-lrn_icon_finish"></div>
+      </div>
       {{/unless}}
     </section>
 

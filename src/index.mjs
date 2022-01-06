@@ -65,31 +65,30 @@ cli
       currentSidebar[i].sections = [];
 
       const contents = fileContents[file];
-      const sections = contents.split("---").map(content => content.trim());
-      const renderedSections = sections.map((section, j) => {
+      const rawSections = contents.split("---").map(content => content.trim());
+
+      // TODO: rename "sections" to "steps"?
+      const sections = rawSections.map((section, j) => {
         // early return if no content
         if (section.length === 0) { return ""; }
 
         let rendered = md.render(section);
+        let id;
 
-        if (j > 0) { // no need to
-          // get the title from the section, so we can replace with the number
-          // of it into the rendered
+        if (j > 0) {
+          // no need to get the title from the section, so we can replace with
+          // the number of it into the rendered
           const sectionTokens = md.parse(section);
           const titleToken = sectionTokens.find((token) => token.type === "heading_open");
           const titleIndex = sectionTokens.indexOf(titleToken);
           const title = sectionTokens[titleIndex + 1].content;
           rendered = rendered.replace(title, `${j}. ${title}`)
+          id = titleToken.attrGet("id");
 
-          currentSidebar[i].sections.push({
-            title,
-            num: j,
-            id: titleToken.attrGet("id")
-          });
-
+          currentSidebar[i].sections.push({ title, num: j, id });
         }
 
-        return rendered;
+        return { rendered, id };
       });
 
       const tokens = md.parse(contents);
@@ -99,7 +98,7 @@ cli
         filename,
         title: tokens[firstTitleIndex + 1].content,
         sidebar: currentSidebar,
-        sections: renderedSections,
+        sections,
       };
 
       // sections.forEach((section) => {
