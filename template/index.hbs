@@ -134,6 +134,8 @@
     const completionCheckboxes = document.querySelectorAll('.step input[type="checkbox"]');
     const currentSidebarSection = Array.from(sidebarSections).findIndex((section) => section.classList.contains("current"));
 
+    let allowScroll = true; // FIXME: this is too ugly...
+
     const completionCacheKey = "{{filename}}";
     let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
     const cacheCompletion = () => {
@@ -173,8 +175,7 @@
         cacheCompletion();
 
         const nextSection = stepSections[i + 1];
-        if (checked && nextSection) {
-          debugger;
+        if (allowScroll && checked && nextSection) {
           window.scrollTo({
             top: nextSection.offsetTop - 50,
             left: 0,
@@ -189,9 +190,12 @@
       const markAllCompleteButton = document.querySelector('.step.final .button');
       if (markAllCompleteButton) {
         markAllCompleteButton.addEventListener("click", (event) => {
+          allowScroll = false;
           completionCheckboxes.forEach((checkbox) => {
-            checkbox.checked = true;
-            checkbox.dispatchEvent(new Event("change"));
+            if (!checkbox.checked) {
+              checkbox.checked = true;
+              checkbox.dispatchEvent(new Event("change"));
+            }
           });
         });
       }
@@ -220,12 +224,16 @@
 
     // Reading progress/scroll
     const progressBarEl = document.querySelector(".progress-bar-container .progress");
-    const startScrollY = stepSections[0].getBoundingClientRect().top + window.scrollY - 100;
+    const startScrollY = stepSections[0].getBoundingClientRect().top + window.scrollY - 100; // `window.scrollY` here is to compensate if page starts with scrollY > 0
 
     // Only calculate content height after DOM content is fully loaded.
     let contentHeight = 0;
     document.addEventListener("DOMContentLoaded", () => {
-      stepSections.forEach((stepSection) => contentHeight += stepSection.scrollHeight);
+      stepSections.forEach((stepSection, i) => {
+        // ignore last section
+        if (i === stepSections.length - 1) { return; }
+        contentHeight += stepSection.scrollHeight;
+      });
     });
     contentHeight -= 300;
 
@@ -254,8 +262,6 @@
       const scrollPercentage = (scrollPosition / contentHeight) * 100;
       progressBarEl.style.width = scrollPercentage + "%";
     });
-
-
 
   </script>
 

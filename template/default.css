@@ -379,7 +379,8 @@ section + .step-separator {
   left: 0;
   width: 100%;
   height: var(--progress-height);
-  background-color: var(--secondary-color);
+  background-color: rgb(166, 166, 166, 0.5);
+  backdrop-filter: blur(2px);
 }
 body.in-content .progress-bar-container { opacity: 1; }
 /* progress bar */
