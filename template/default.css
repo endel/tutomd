@@ -97,7 +97,12 @@ aside .section ul li::before {
   background-color: var(--link-color);
   width: 8px;
   height: 8px;
+  transition: background-color 0.2s;
 }
+
+aside .section ul li.completed::before { background-color: var(--complete-color); }
+aside .section ul li.completed a { color: var(--complete-color); }
+aside .section ul li.completed .num::before { background-color: var(--complete-color); }
 
 aside .section .info { display: flex; }
 aside .section .info .thumbnail {

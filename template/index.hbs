@@ -16,6 +16,7 @@
 </head>
 <body class="line-numbers">{{!-- Syntax highlight with line numbers --}}
 
+
   {{!-- Sidebar --}}
   <aside>
     {{#each sidebar}}
@@ -89,6 +90,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.js"></script>
 
   <script type="text/javascript">
+    const completionCacheKey ="{{filename}}";
+    const cacheCompletion = () => localStorage.setItem(completionCacheKey, JSON.stringify(cachedCompletionStatus));
+    let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
+    console.log(cachedCompletionStatus);
+
+
     //
     // Scroll to top
     //
@@ -106,11 +113,33 @@
     // Step completion: Scroll animation for next step
     //
     const stepSections = document.querySelectorAll('.step');
+    const sidebarItems = document.querySelectorAll('aside ul li');
     const completionCheckboxes = document.querySelectorAll('.step input[type="checkbox"]');
     completionCheckboxes.forEach((checkbox, i) => {
+      // Flag sidebar as checked
       checkbox.addEventListener("change", (event) => {
+        if (checkbox.checked) {
+          sidebarItems[i].classList.add("completed");
+
+        } else {
+          sidebarItems[i].classList.remove("completed");
+        }
+      });
+
+      // Initial checked state from cached value
+      if (cachedCompletionStatus[i]) {
+        checkbox.checked = true;
+        checkbox.dispatchEvent(new Event("change"));
+      }
+
+      checkbox.addEventListener("change", (event) => {
+        const checked = checkbox.checked;
+
+        cachedCompletionStatus[i] = checked;
+        cacheCompletion();
+
         const nextSection = stepSections[i + 1];
-        if (checkbox.checked && nextSection) {
+        if (checked && nextSection) {
           window.scrollTo({
             top: nextSection.offsetTop - 50,
             left: 0,
@@ -118,6 +147,10 @@
           });
         }
       });
+
+      //
+      // TODO / IDEA: automatically scroll to the last unfinished step.
+      //
     });
 
   </script>
