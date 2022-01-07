@@ -21,7 +21,9 @@
     {{#each sidebar}}
       <div class="section{{#if sections}} current{{/if}}">
         <div class="info">
-          <div class="thumbnail" style="background-image: url({{filename}}.png);"></div>
+          <div class="thumbnail" style="background-image: url({{filename}}.png);">
+            <div class="ifont ifont-lrn_icon_finish"></div>
+          </div>
           <div class="data">
             <small>Tutorial</small>
             <a href="{{filename}}.html">{{title}}</a>
@@ -39,14 +41,23 @@
   </aside>
 
   <main id="summary">
+    <div class="progress-bar-container">
+      <div class="progress"></div>
+    </div>
+
     <header style="background-image: url({{filename}}.png)">
       <div class="backdrop">
-        <img src="{{filename}}.png" />
+        {{!-- <img src="{{filename}}.png" /> --}}
       </div>
     </header>
 
     {{#each sections}}
     <section class="{{#if @first}} summary {{else}} step {{/if}}">
+      {{#if @first}}
+      <div>
+        <img src="{{../filename}}.png" width="200" />
+      </div>
+      {{/if}}
 
       {{{ rendered }}}
 
@@ -100,30 +111,40 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.js"></script>
 
   <script type="text/javascript">
-    const completionCacheKey ="{{filename}}";
-    const cacheCompletion = () => localStorage.setItem(completionCacheKey, JSON.stringify(cachedCompletionStatus));
-    let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
-
-
     //
     // Scroll to top
     //
     const backToTopEl = document.querySelector(".back-to-top");
-    window.addEventListener("scroll", function () {
-      const y = window.scrollY;
-      if (y >= 800) {
-        backToTopEl.classList.add("show");
-      } else {
-        backToTopEl.classList.remove("show");
-      }
+    backToTopEl.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     });
 
     //
     // Step completion: Scroll animation for next step
     //
+    const main = document.querySelector('main');
     const stepSections = document.querySelectorAll('.step');
     const sidebarItems = document.querySelectorAll('aside ul li');
+    const sidebarSections = document.querySelectorAll('aside .section');
     const completionCheckboxes = document.querySelectorAll('.step input[type="checkbox"]');
+    const currentSidebarSection = Array.from(sidebarSections).findIndex((section) => section.classList.contains("current"));
+
+    const completionCacheKey = "{{filename}}";
+    let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
+    const cacheCompletion = () => {
+      const previousCompletionStatus = cachedCompletionStatus.completed;
+      cachedCompletionStatus.completed = Array.from(sidebarItems).every((_, i) => cachedCompletionStatus[i])
+      if (previousCompletionStatus !== cachedCompletionStatus.completed) {
+        if (cachedCompletionStatus.completed) {
+          sidebarSections[currentSidebarSection].classList.add("complete");
+        } else {
+          sidebarSections[currentSidebarSection].classList.remove("complete");
+        }
+      }
+      localStorage.setItem(completionCacheKey, JSON.stringify(cachedCompletionStatus));
+    };
+
     completionCheckboxes.forEach((checkbox, i) => {
       // Flag sidebar as checked
       checkbox.addEventListener("change", (event) => {
@@ -161,18 +182,75 @@
       // Mark all as complete & continue
       //
       const markAllCompleteButton = document.querySelector('.step.final .button');
-      markAllCompleteButton.addEventListener("click", (event) => {
-        completionCheckboxes.forEach((checkbox) => {
-          checkbox.checked = true;
-          checkbox.dispatchEvent(new Event("change"));
+      if (markAllCompleteButton) {
+        markAllCompleteButton.addEventListener("click", (event) => {
+          completionCheckboxes.forEach((checkbox) => {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event("change"));
+          });
         });
-      });
-
-
-      //
-      // TODO / IDEA: automatically scroll to the last unfinished step.
-      //
+      }
     });
+
+    //
+    // TODO: CONFETTI ANIMATION WHEN LAST STEP IS COMPLETE
+    // <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.4.0/confetti.js">
+    //
+    // const button = document.querySelector(".my-button")
+    // button.addEventListener("click", () => confetti(button))
+
+
+    //
+    // TODO / IDEA: automatically scroll to the last unfinished step.
+    //
+
+    //
+    // check for previously completed sections on the sidebar
+    //
+    {{#each sidebar}}
+      if (JSON.parse(localStorage.getItem("{{filename}}") || "{}").completed) {
+        sidebarSections[{{@index}}].classList.add("complete");
+      }
+    {{/each}}
+
+    // Reading progress/scroll
+    const progressBarEl = document.querySelector(".progress-bar-container .progress");
+    const startScrollY = stepSections[0].getBoundingClientRect().top + window.scrollY - 100;
+
+    // Only calculate content height after DOM content is fully loaded.
+    let contentHeight = 0;
+    document.addEventListener("DOMContentLoaded", () => {
+      stepSections.forEach((stepSection) => contentHeight += stepSection.scrollHeight);
+    });
+    contentHeight -= 300;
+
+    const onResize = (event) => {
+      const mainBoundingRect = main.getBoundingClientRect();
+      const progressBarContainer = document.querySelector(".progress-bar-container");
+      progressBarContainer.style.left = `${mainBoundingRect.x}px`;
+      progressBarContainer.style.width = `${mainBoundingRect.width}px`;
+    };
+    window.addEventListener("resize", onResize);
+    onResize();
+
+    window.addEventListener("scroll", function () {
+      const scrollY = window.scrollY;
+      if (scrollY >= startScrollY) {
+        document.body.classList.add("in-content");
+
+      } else {
+        document.body.classList.remove("in-content");
+      }
+
+      // get current scroll position
+      const scrollPosition = Math.max(0, scrollY - startScrollY);
+
+      // get scroll percentage and set width of progress bar
+      const scrollPercentage = (scrollPosition / contentHeight) * 100;
+      progressBarEl.style.width = scrollPercentage + "%";
+    });
+
+
 
   </script>
 

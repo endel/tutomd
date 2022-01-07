@@ -5,6 +5,7 @@
   --link-color: rgb(33, 150, 243);
   --secondary-color: rgb(166, 166, 166);
   --complete-color: rgb(100, 206, 92);
+  --progress-height: .5rem;
 }
 
 /* CSS RESET */
@@ -107,21 +108,32 @@ aside .section ul li.completed .num::before { background-color: var(--complete-c
 aside .section .info { display: flex; }
 aside .section .info .thumbnail {
   border-radius: 0.5em;
-  display: inline-block;
   background-position: center;
   background-size: cover;
   width: 46px;
   height: 46px;
+  transition: border 0.2s;
+  /* centralize "completed" checkmark */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* complete section! */
 aside .section.complete .info .thumbnail { border: 3px solid var(--complete-color); }
+aside .section.complete .info { color: var(--complete-color); }
+aside .section:not(.complete) .info .ifont { display: none; font-size: 18px; }
+
+/* current section! */
+aside .section.current .info .thumbnail { border: 3px solid var(--link-color); }
+
 aside .section .info .data {
   display: inline-block;
   padding: 0.5em 0.7em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-aside .section .info .data small {
-  display: block;
-}
+aside .section .info .data small { display: block; }
+aside .section .info .ifont { display: inline-block; }
 
 .back-to-top {
   position: fixed;
@@ -146,7 +158,7 @@ aside .section .info .data small {
   opacity: 0;
   transition: opacity 0.2s;
 }
-.back-to-top.show { opacity: 1; }
+body.in-content .back-to-top { opacity: 1; }
 
 main {
   position: relative;
@@ -206,14 +218,14 @@ blockquote {
 /* summary / header */
 header {
   background-size: cover;
-  height: 400px;
+  height: 300px;
   position: relative;
 }
 header .backdrop {
   position: absolute;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(8px);
 }
 header img {
   width: 10vw;
@@ -241,7 +253,7 @@ section {
 }
 
 /* first step box */
-section.step:nth-child(3) {
+section.summary + section.step {
   margin-top: calc(var(--step-margin) * 0.7);
 }
 
@@ -346,4 +358,28 @@ section + .step-separator {
   display: block;
   margin: 0 auto;
   background: rgb(224, 224, 224);
+}
+
+/* reading progress/scroll */
+/* progress bar container */
+.progress-bar-container {
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--progress-height);
+  background-color: var(--secondary-color);
+}
+body.in-content .progress-bar-container { opacity: 1; }
+/* progress bar */
+.progress-bar-container > .progress {
+  height: var(--progress-height);
+  background-color: var(--complete-color);
+  width: 0%;
+  height: 100%;
+  float: left;
+  transition: width 0.2s;
 }
