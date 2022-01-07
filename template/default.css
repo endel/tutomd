@@ -202,6 +202,11 @@ section ul li::before {
   border-radius: 100%;
 }
 
+.centered-content {
+  margin: 0 auto;
+  max-width: 835px;
+}
+
 /* quotes */
 .summary blockquote {
   background: #fff;
@@ -259,8 +264,11 @@ section.summary + section.step {
 
 /* all step boxes */
 section.step {
-  margin-left: var(--step-margin);
-  margin-right: var(--step-margin);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  /* margin-left: var(--step-margin);
+  margin-right: var(--step-margin); */
   padding: 5em 5em 2.5em 5em;
   border-radius: 0.5em;
   box-shadow: 0 5px 10px 0 rgb(0 0 0 / 10%);

@@ -53,25 +53,27 @@
 
     {{#each sections}}
     <section class="{{#if @first}} summary {{else}} step {{/if}}">
-      {{#if @first}}
-      <div>
-        <img src="{{../filename}}.png" width="200" />
+      <div class="centered-content">
+        {{#if @first}}
+        <div>
+          <img src="{{../filename}}.png" width="200" />
+        </div>
+        {{/if}}
+
+        {{{ rendered }}}
+
+        {{#unless @first}}
+        <input type="checkbox" id="complete-{{ id }}" />
+        <div>
+          <label class="button" for="complete-{{ id }}">
+            <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+            <span class="checked">Mark step as incomplete</span>
+          </label>
+
+          <div class="completion ifont ifont-lrn_icon_finish"></div>
+        </div>
+        {{/unless}}
       </div>
-      {{/if}}
-
-      {{{ rendered }}}
-
-      {{#unless @first}}
-      <input type="checkbox" id="complete-{{ id }}" />
-      <div>
-        <label class="button" for="complete-{{ id }}">
-          <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
-          <span class="checked">Mark step as incomplete</span>
-        </label>
-
-        <div class="completion ifont ifont-lrn_icon_finish"></div>
-      </div>
-      {{/unless}}
     </section>
 
     {{!-- add separator between each step/section --}}
@@ -86,17 +88,19 @@
     <div class="step-separator"></div>
 
     <section class="step final">
-      {{!-- TODO: Use different wording here --}}
-      <p><small>You've made it!</small></p>
+      <div class="centered-content">
+        {{!-- TODO: Use different wording here --}}
+        <p><small>You've made it!</small></p>
 
-      <h2>{{title}}</h2>
+        <h2>{{title}}</h2>
 
-      {{#if next}}
-        <a href="{{next}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
-        <p><a href="{{next}}.html" class="button incomplete">Continue without marking complete</a></p>
-      {{else}}
-        <p>👏👏👏</p>
-      {{/if}}
+        {{#if next}}
+          <a href="{{next}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
+          <p><a href="{{next}}.html" class="button incomplete">Continue without marking complete</a></p>
+        {{else}}
+          <p>👏👏👏</p>
+        {{/if}}
+      </div>
     </section>
 
   </main>
@@ -170,6 +174,7 @@
 
         const nextSection = stepSections[i + 1];
         if (checked && nextSection) {
+          debugger;
           window.scrollTo({
             top: nextSection.offsetTop - 50,
             left: 0,
