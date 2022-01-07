@@ -261,6 +261,7 @@ section.step .completion {
 section.step.complete .completion { background-color: #1fd348; }
 
 .button {
+  text-decoration: none;
   cursor: pointer;
   display: block;
   padding: 0.8em;
@@ -299,6 +300,17 @@ section.step.final h2 {
   padding-bottom: 0.5em;
   font-weight: 500;
   border-bottom: 1px solid rgb(224, 224, 224);
+}
+/* last step buttons */
+section.step.final .button:last-child {
+  /* margin-top: 0.5em; */
+  background: #fff;
+  color: var(--link-color);
+  box-shadow: none;
+  text-decoration: underline;
+}
+section.step.final .button:hover:last-child {
+  text-decoration: none;
 }
 
 /* step titles */

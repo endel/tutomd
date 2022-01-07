@@ -74,8 +74,13 @@
       <p><small>You've made it!</small></p>
 
       <h2>{{title}}</h2>
-      <a href="#" class="button">Mark all complete and continue</a>
-      <p><a href="#">Continue without marking complete</a></p>
+
+      {{#if next}}
+        <a href="{{next}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
+        <p><a href="{{next}}.html" class="button incomplete">Continue without marking complete</a></p>
+      {{else}}
+        <p>👏👏👏👏👏👏</p>
+      {{/if}}
     </section>
 
   </main>
@@ -93,7 +98,6 @@
     const completionCacheKey ="{{filename}}";
     const cacheCompletion = () => localStorage.setItem(completionCacheKey, JSON.stringify(cachedCompletionStatus));
     let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
-    console.log(cachedCompletionStatus);
 
 
     //
@@ -147,6 +151,18 @@
           });
         }
       });
+
+      //
+      // Mark all as complete & continue
+      //
+      const markAllCompleteButton = document.querySelector('.step.final .button');
+      markAllCompleteButton.addEventListener("click", (event) => {
+        completionCheckboxes.forEach((checkbox) => {
+          checkbox.checked = true;
+          checkbox.dispatchEvent(new Event("change"));
+        });
+      });
+
 
       //
       // TODO / IDEA: automatically scroll to the last unfinished step.

@@ -59,7 +59,7 @@ cli
 
     files.forEach((file, i) => {
       const filename = path.basename(file, ".md");
-      console.log({ filename });
+      const next = files[i + 1] && path.basename(files[i + 1], ".md");
 
       const currentSidebar = JSON.parse(JSON.stringify(sidebar));
       currentSidebar[i].sections = [];
@@ -96,6 +96,7 @@ cli
 
       const data = {
         filename,
+        next,
         title: tokens[firstTitleIndex + 1].content,
         sidebar: currentSidebar,
         sections,
