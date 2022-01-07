@@ -389,5 +389,5 @@ body.in-content .progress-bar-container { opacity: 1; }
   width: 0%;
   height: 100%;
   float: left;
-  transition: width 0.2s;
+  transition: width 0.1s;
 }
