@@ -16,7 +16,6 @@
 </head>
 <body class="line-numbers">{{!-- Syntax highlight with line numbers --}}
 
-
   {{!-- Sidebar --}}
   <aside>
     {{#each sidebar}}
@@ -40,12 +39,18 @@
   </aside>
 
   <main id="summary">
+    <header style="background-image: url({{filename}}.png)">
+      <div class="backdrop">
+        <img src="{{filename}}.png" />
+      </div>
+    </header>
+
     {{#each sections}}
     <section class="{{#if @first}} summary {{else}} step {{/if}}">
+
       {{{ rendered }}}
 
       {{#unless @first}}
-
       <input type="checkbox" id="complete-{{ id }}" />
       <div>
         <label class="button" for="complete-{{ id }}">
@@ -79,7 +84,7 @@
         <a href="{{next}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
         <p><a href="{{next}}.html" class="button incomplete">Continue without marking complete</a></p>
       {{else}}
-        <p>👏👏👏👏👏👏</p>
+        <p>👏👏👏</p>
       {{/if}}
     </section>
 

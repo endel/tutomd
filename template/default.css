@@ -204,18 +204,34 @@ blockquote {
 }
 
 /* summary / header */
-section:first-child {
+header {
+  background-size: cover;
+  height: 400px;
+  position: relative;
+}
+header .backdrop {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(24px);
+}
+header img {
+  width: 10vw;
+}
+
+/* summary / header */
+section.summary {
   background: #1a1a1a;
   color: var(--secondary-color);
   line-height: 1.6em;
   padding: calc(var(--step-margin) / 2) var(--step-margin);
 }
 
-section:first-child h1, section:first-child h2 {
+section.summary h1, section.summary h2 {
   color: #fff;
 }
 
-section:first-child ul li::before {
+section.summary ul li::before {
   background-color: #fff;
 }
 
@@ -225,7 +241,7 @@ section {
 }
 
 /* first step box */
-section.step:nth-child(2) {
+section.step:nth-child(3) {
   margin-top: calc(var(--step-margin) * 0.7);
 }
 
