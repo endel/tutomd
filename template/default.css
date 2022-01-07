@@ -45,7 +45,9 @@ aside a {
   color: inherit;
   text-decoration: none;
 }
-aside .current { color: #fff; } /* highlight current section */
+/* highlight current section */
+/* aside .current { color: #fff; }  */
+/* aside .current { font-weight: bold; }  */
 aside a:hover { color: var(--link-color); }
 
 aside .section:not(:first-child) { margin-top: 2em; }
@@ -119,12 +121,12 @@ aside .section .info .thumbnail {
   justify-content: center;
 }
 /* complete section! */
-aside .section.complete .info .thumbnail { border: 3px solid var(--complete-color); }
+aside .section.complete .info .thumbnail { border: 3px solid var(--complete-color) !important; }
 aside .section.complete .info { color: var(--complete-color); }
 aside .section:not(.complete) .info .ifont { display: none; font-size: 18px; }
 
 /* current section! */
-aside .section.current .info .thumbnail { border: 3px solid var(--link-color); }
+aside .section.current .info .thumbnail { border: 3px solid var(--secondary-color); }
 
 aside .section .info .data {
   display: inline-block;
