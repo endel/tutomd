@@ -38,7 +38,7 @@
     {{/each}}
   </aside>
 
-  <main>
+  <main id="summary">
     {{#each sections}}
     <section class="{{#if @first}} summary {{else}} step {{/if}}">
       {{{ rendered }}}
@@ -79,10 +79,48 @@
 
   </main>
 
+  <a href="#summary" class="back-to-top">
+    <div class="ifont ifont-icons-jump-to-top"></div>
+  </a>
+
   {{!-- Syntax highlight --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-core.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.js"></script>
+
+  <script type="text/javascript">
+    //
+    // Scroll to top
+    //
+    const backToTopEl = document.querySelector(".back-to-top");
+    window.addEventListener("scroll", function () {
+      const y = window.scrollY;
+      if (y >= 800) {
+        backToTopEl.classList.add("show");
+      } else {
+        backToTopEl.classList.remove("show");
+      }
+    });
+
+    //
+    // Step completion: Scroll animation for next step
+    //
+    const stepSections = document.querySelectorAll('.step');
+    const completionCheckboxes = document.querySelectorAll('.step input[type="checkbox"]');
+    completionCheckboxes.forEach((checkbox, i) => {
+      checkbox.addEventListener("change", (event) => {
+        const nextSection = stepSections[i + 1];
+        if (checkbox.checked && nextSection) {
+          window.scrollTo({
+            top: nextSection.offsetTop - 50,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+  </script>
 
 </body>
 </html>

@@ -118,6 +118,31 @@ aside .section .info .data small {
   display: block;
 }
 
+.back-to-top {
+  position: fixed;
+  z-index: 99999;
+  right: 26px;
+  bottom: 20px;
+  text-decoration: none;
+
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  box-shadow: 0 5px 10px 0 rgb(0 0 0 / 10%);
+  background-color: #2196f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.back-to-top.show { opacity: 1; }
+
 main {
   position: relative;
   flex-grow: 1;
