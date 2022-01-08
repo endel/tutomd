@@ -334,7 +334,9 @@ input[type="checkbox"]:not(:checked) ~ div .button .checked { display: none; }
 
 /* last step box */
 section.step.final { margin-bottom: 5em; }
-section.step.final h2 {
+section.step.final p { margin-bottom: 0.2em; }
+section.step.final h3 {
+  margin-bottom: 1.5em;
   padding-bottom: 0.5em;
   font-weight: 500;
   border-bottom: 1px solid rgb(224, 224, 224);

@@ -89,14 +89,20 @@
 
     <section class="step final">
       <div class="centered-content">
-        {{!-- TODO: Use different wording here --}}
-        <p><small>You've made it!</small></p>
+        <p><small>End of {{current.num}}/{{current.total}}:</small></p>
+        <h3>{{title}}</h3>
 
-        <h2>{{title}}</h2>
+        {{!-- TODO: Use different wording here --}}
+        {{#if next}}
+          <p><small>Next section:</small></p>
+          <h3>{{next.num}}. {{next.title}}</h3>
+        {{else}}
+          <p><small>Congratulations, you've made it!</small></p>
+        {{/if}}
 
         {{#if next}}
-          <a href="{{next}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
-          <p><a href="{{next}}.html" class="button incomplete">Continue without marking complete</a></p>
+          <a href="{{next.filename}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
+          <p><a href="{{next.filename}}.html" class="button incomplete">Continue without marking complete</a></p>
         {{else}}
           <p>👏👏👏</p>
         {{/if}}

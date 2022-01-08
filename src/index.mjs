@@ -49,9 +49,10 @@ cli
     const template = Handlebars.compile(source);
     const fileContents = {};
 
-    const sidebar = files.map(file => {
+    const sidebar = files.map((file, i) => {
       fileContents[file] = fs.readFileSync(file).toString();
       return {
+        num: i + 1,
         title: parseTitle(fileContents[file]),
         filename: path.basename(file, ".md")// FIXME: don't duplicate path.basename() here
       };
@@ -59,7 +60,9 @@ cli
 
     files.forEach((file, i) => {
       const filename = path.basename(file, ".md");
-      const next = files[i + 1] && path.basename(files[i + 1], ".md");
+      const next = sidebar[i + 1];
+
+      console.log("NEXT:", next);
 
       const currentSidebar = JSON.parse(JSON.stringify(sidebar));
       currentSidebar[i].sections = [];
@@ -95,6 +98,10 @@ cli
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
+        current: {
+          num: i + 1,
+          total: files.length
+        },
         filename,
         next,
         title: tokens[firstTitleIndex + 1].content,
