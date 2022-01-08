@@ -167,6 +167,7 @@ main {
   flex-grow: 1;
   flex-shrink: 1;
   width: 0; /* no idea why this is working... it works, tho... */
+  overflow: hidden;
 }
 
 /* titles */

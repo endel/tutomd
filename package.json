@@ -21,5 +21,8 @@
     "markdown-it-mark": "^3.0.1",
     "mkdirp": "^1.0.4",
     "prismjs": "^1.25.0"
+  },
+  "devDependencies": {
+    "dom-confetti": "^0.2.2"
   }
 }

@@ -13,6 +13,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.css">
 
   <title>{{ title }}</title>
+
+  <script type="text/javascript">
+    // modified version of dom-confetti.
+    // (adds initialPosition to physics/config option)
+    const defaultColors = ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"];
+    function createElements(root, elementCount, colors, width, height) { return Array.from({ length: elementCount }).map((_, index) => { const element = document.createElement("div"); const color = colors[index % colors.length]; element.style["background-color"] = color; element.style.width = width; element.style.height = height; element.style.position = "absolute"; element.style.willChange = "transform, opacity"; element.style.visibility = "hidden"; root.appendChild(element); return element; }); }
+    function randomPhysics(initialPosition, angle, spread, startVelocity, random) { const radAngle = angle * (Math.PI / 180); const radSpread = spread * (Math.PI / 180); return { x: initialPosition.x, y: initialPosition.y, z: initialPosition.z, wobble: random() * 10, wobbleSpeed: 0.1 + random() * 0.1, velocity: startVelocity * 0.5 + random() * startVelocity, angle2D: -radAngle + (0.5 * radSpread - random() * radSpread), angle3D: -(Math.PI / 4) + random() * (Math.PI / 2), tiltAngle: random() * Math.PI, tiltAngleSpeed: 0.1 + random() * 0.3 }; }
+    function updateFetti(fetti, progress, dragFriction, decay) { fetti.physics.x += Math.cos(fetti.physics.angle2D) * fetti.physics.velocity; fetti.physics.y += Math.sin(fetti.physics.angle2D) * fetti.physics.velocity; fetti.physics.z += Math.sin(fetti.physics.angle3D) * fetti.physics.velocity; fetti.physics.wobble += fetti.physics.wobbleSpeed; if (decay) { fetti.physics.velocity *= decay; } else { fetti.physics.velocity -= fetti.physics.velocity * dragFriction; } fetti.physics.y += 3; fetti.physics.tiltAngle += fetti.physics.tiltAngleSpeed; const { x, y, z, tiltAngle, wobble } = fetti.physics; const wobbleX = x + 10 * Math.cos(wobble); const wobbleY = y + 10 * Math.sin(wobble); const transform = `translate3d(${wobbleX}px, ${wobbleY}px, ${z}px) rotate3d(1, 1, 1, ${tiltAngle}rad)`; fetti.element.style.visibility = "visible"; fetti.element.style.transform = transform; fetti.element.style.opacity = 1 - progress; }
+    function animate(root, fettis, dragFriction, decay, duration, stagger) { let startTime; return new Promise(resolve => { function update(time) { if (!startTime) startTime = time; const elapsed = time - startTime; const progress = startTime === time ? 0 : (time - startTime) / duration; fettis.slice(0, Math.ceil(elapsed / stagger)).forEach(fetti => { updateFetti(fetti, progress, dragFriction, decay); }); if (time - startTime < duration) { requestAnimationFrame(update); } else { fettis.forEach(fetti => { if (fetti.element.parentNode === root) { return root.removeChild(fetti.element); } }); resolve(); } } requestAnimationFrame(update); }); }
+
+    const defaults = { angle: 90, spread: 45, startVelocity: 45, elementCount: 50, width: "10px", height: "10px", perspective: "", colors: defaultColors, duration: 3000, stagger: 0, dragFriction: 0.1, random: Math.random, initialPosition: { x: 0, y: 0, z: 0 }, };
+    function backwardPatch(config) { if (!config.stagger && config.delay) { config.stagger = config.delay; } return config; }
+    function confetti(root, config = {}) { const { elementCount, colors, width, height, perspective, angle, spread, startVelocity, decay, dragFriction, duration, stagger, random, initialPosition, } = Object.assign({}, defaults, backwardPatch(config)); root.style.perspective = perspective; const elements = createElements(root, elementCount, colors, width, height); const fettis = elements.map(element => ({ element, physics: randomPhysics(initialPosition, angle, spread, startVelocity, random) })); return animate(root, fettis, dragFriction, decay, duration, stagger); }
+  </script>
+
 </head>
 <body class="line-numbers">{{!-- Syntax highlight with line numbers --}}
 
@@ -89,12 +104,12 @@
 
     <section class="step final">
       <div class="centered-content">
-        <p><small>End of {{current.num}}/{{current.total}}:</small></p>
+        <p><small>Finished {{current.num}} of {{current.total}}:</small></p>
         <h3>{{title}}</h3>
 
         {{!-- TODO: Use different wording here --}}
         {{#if next}}
-          <p><small>Next section:</small></p>
+          <p><small>Next:</small></p>
           <h3>{{next.num}}. {{next.title}}</h3>
         {{else}}
           <p><small>Congratulations, you've made it!</small></p>
@@ -144,9 +159,10 @@
 
     const completionCacheKey = "{{filename}}";
     let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
+    const isAllComplete = () => Array.from(sidebarItems).every((_, i) => cachedCompletionStatus[i]);
     const cacheCompletion = () => {
       const previousCompletionStatus = cachedCompletionStatus.completed;
-      cachedCompletionStatus.completed = Array.from(sidebarItems).every((_, i) => cachedCompletionStatus[i])
+      cachedCompletionStatus.completed = isAllComplete();
       if (previousCompletionStatus !== cachedCompletionStatus.completed) {
         if (cachedCompletionStatus.completed) {
           sidebarSections[currentSidebarSection].classList.add("complete");
@@ -180,7 +196,28 @@
         cachedCompletionStatus[i] = checked;
         cacheCompletion();
 
-        const nextSection = stepSections[i + 1];
+        // if all are complete, trigger confetti animation
+        if (isAllComplete()) {
+          const button = stepSections[i].querySelector(".button");
+          confetti(button, {
+            initialPosition: {
+              x: button.offsetWidth / 2,
+              y: 0,
+              z: 0,
+            }
+          });
+          return;
+        }
+
+        // query for a next step/section that is not yet complete
+        const nextSection = Array
+          .from(stepSections)
+          .find((section, j) => {
+            return (
+              (j > i) &&
+              !stepSections[j].querySelector('input[type="checkbox"]:checked')
+            );
+          });
         if (allowScroll && checked && nextSection) {
           window.scrollTo({
             top: nextSection.offsetTop - 50,
