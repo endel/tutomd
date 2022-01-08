@@ -9,6 +9,8 @@ import markdownItIns from "markdown-it-anchor";
 import markdownItMark from "markdown-it-mark";
 import markdownItFootnote from "markdown-it-footnote";
 
+const READING_WORDS_PER_MINUTE = 180;
+
 const md = markdownIt({
   html: true,
   linkify: true,
@@ -25,6 +27,47 @@ function parseTitle(contents) {
   const tokens = md.parse(contents);
   const index = tokens.findIndex((token) => token.type === "heading_open");
   return tokens[index + 1].content;
+}
+
+function getWordCount(children) {
+  let wordCount = 0;
+
+  children.forEach((token) => {
+    if (token.type === "inline") {
+      wordCount += token.content.split(" ").length;
+    }
+
+    if (!token.children) {
+      return;
+    }
+
+    wordCount += getWordCount(token.children);
+  });
+
+  return wordCount;
+}
+
+/**
+ * Translates seconds into human readable format of seconds, minutes, hours, days, and years
+ *
+ * @param  {number} seconds The number of seconds to be processed
+ * @return {string}         The phrase describing the amount of time
+ */
+function forHumans(seconds) {
+  var levels = [
+    [Math.floor(seconds / 31536000), 'years'],
+    [Math.floor((seconds % 31536000) / 86400), 'days'],
+    [Math.floor(((seconds % 31536000) % 86400) / 3600), 'hours'],
+    [Math.floor((((seconds % 31536000) % 86400) % 3600) / 60), 'minutes'],
+    // [(((seconds % 31536000) % 86400) % 3600) % 60, 'seconds'],
+  ];
+  var returntext = '';
+
+  for (var i = 0, max = levels.length; i < max; i++) {
+    if (levels[i][0] === 0) continue;
+    returntext += ' ' + levels[i][0] + ' ' + (levels[i][0] === 1 ? levels[i][1].substr(0, levels[i][1].length - 1) : levels[i][1]);
+  };
+  return returntext.trim();
 }
 
 const cli = cac();
@@ -62,13 +105,12 @@ cli
       const filename = path.basename(file, ".md");
       const next = sidebar[i + 1];
 
-      console.log("NEXT:", next);
-
       const currentSidebar = JSON.parse(JSON.stringify(sidebar));
       currentSidebar[i].sections = [];
 
       const contents = fileContents[file];
       const rawSections = contents.split("---").map(content => content.trim());
+      let wordCount = 0;
 
       // TODO: rename "sections" to "steps"?
       const sections = rawSections.map((section, j) => {
@@ -78,10 +120,12 @@ cli
         let rendered = md.render(section);
         let id;
 
+        const sectionTokens = md.parse(section);
+        wordCount += getWordCount(sectionTokens);
+
         if (j > 0) {
           // no need to get the title from the section, so we can replace with
           // the number of it into the rendered
-          const sectionTokens = md.parse(section);
           const titleToken = sectionTokens.find((token) => token.type === "heading_open");
           const titleIndex = sectionTokens.indexOf(titleToken);
           const title = sectionTokens[titleIndex + 1].content;
@@ -102,6 +146,7 @@ cli
           num: i + 1,
           total: files.length
         },
+        estimatedReadingTime: forHumans(Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60)),
         filename,
         next,
         title: tokens[firstTitleIndex + 1].content,
@@ -114,7 +159,6 @@ cli
       //   console.log(md.render(section));
       //   console.log("...");
       // });
-
 
       const html = template(data);
 

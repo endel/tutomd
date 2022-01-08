@@ -247,8 +247,31 @@ section.summary {
   padding: calc(var(--step-margin) / 2) var(--step-margin);
 }
 
-section.summary h1, section.summary h2 {
+section.summary h1 {
+  font-size: 40px;
+  line-height: 52px;
+}
+section.summary h1,
+section.summary h2 {
   color: #fff;
+}
+
+section.summary .summary-header {
+  margin-top: -110px;
+}
+section.summary .summary-header img {
+  border-radius: 0.4em;
+  width: 150px;
+  margin-right: 0.3em;
+}
+section.summary .summary-header small {
+  display: inline-block;
+  position: relative;
+  top: -12px;
+}
+section.summary .summary-header small .ifont {
+  position: relative;
+  top: 6px;
 }
 
 section.summary ul li::before {

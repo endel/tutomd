@@ -70,8 +70,9 @@
     <section class="{{#if @first}} summary {{else}} step {{/if}}">
       <div class="centered-content">
         {{#if @first}}
-        <div>
-          <img src="{{../filename}}.png" width="200" />
+        <div class="summary-header">
+          <img src="{{../filename}}.png" />
+          <small><span class="ifont ifont-filled-time"></span> {{../estimatedReadingTime}}</small>
         </div>
         {{/if}}
 
