@@ -1,3 +1,7 @@
+<div align="center">
+<img src="logo.png?raw=1" width="70%" alt="tutomd" />
+</div>
+
 # tutomd
 
 This tool aims to generate structured tutorials very similar to how Unity Learn
@@ -7,8 +11,3 @@ I'm currently streaming the development of this tool on Twitch and it should be
 usable very soon.
 
 Follow me on Twitch 😋 [https://www.twitch.tv/endeld](https://www.twitch.tv/endeld)
-
-## Reading time estimation
-
-Adults read about 200 words per minute, formula is:
-nWords / 200 = number of minutes
