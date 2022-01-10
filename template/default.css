@@ -119,7 +119,14 @@ aside .section .info .thumbnail {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #000;
 }
+/* index/overview item on the sidebar */
+aside .section.is-overview-true {
+  padding-bottom: 1.5em;
+  border-bottom: 1px solid hsla(0,0%,100%,.1);
+}
+
 /* complete section! */
 aside .section.complete .info .thumbnail { border: 3px solid var(--complete-color) !important; }
 aside .section.complete .info { color: var(--complete-color); }
@@ -226,8 +233,12 @@ blockquote {
 /* summary / header */
 header {
   background-size: cover;
-  height: 300px;
+  height: 100px;
   position: relative;
+  background-color:rgb(51, 51, 51);
+}
+body.has-preview-true header {
+  height: 300px;
 }
 header .backdrop {
   position: absolute;
@@ -247,6 +258,10 @@ section.summary {
   padding: calc(var(--step-margin) / 2) var(--step-margin);
 }
 
+body.has-preview-false section.summary  {
+  padding-top: 4em;
+}
+
 section.summary h1 {
   font-size: 40px;
   line-height: 52px;
@@ -256,7 +271,7 @@ section.summary h2 {
   color: #fff;
 }
 
-section.summary .summary-header {
+body.has-preview-true section.summary .summary-header {
   margin-top: -110px;
 }
 section.summary .summary-header img {

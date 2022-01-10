@@ -29,28 +29,32 @@
   </script>
 
 </head>
-<body class="line-numbers">{{!-- Syntax highlight with line numbers --}}
+<body class="line-numbers has-preview-{{hasPreviewImage}}">{{!-- Syntax highlight with line numbers --}}
 
   {{!-- Sidebar --}}
   <aside>
     {{#each sidebar}}
-      <div class="section{{#if sections}} current{{/if}}">
+      <div class="section{{#if sections}} current{{/if}} is-overview-{{isOverview}}">
         <div class="info">
-          <div class="thumbnail" style="background-image: url({{filename}}.png);">
+          <div class="thumbnail" {{#if hasPreviewImage}} style="background-image: url({{filename}}.png); background-color: transparent;" {{/if}}>
             <div class="ifont ifont-lrn_icon_finish"></div>
           </div>
           <div class="data">
-            <small>Tutorial</small>
+            <small>
+              {{#if isOverview}} Project {{else}} Tutorial {{/if}}
+            </small>
             <a href="{{filename}}.html">{{title}}</a>
           </div>
         </div>
-          <ul>
-          {{#if sections}}
-            {{#each sections}}
-              <li><a href="#{{id}}"><span class="num">{{num}}</span>{{title}}</a></li>
-            {{/each}}
-          {{/if}}
-          </ul>
+          {{#unless isOverview}}
+            <ul>
+            {{#if sections}}
+              {{#each sections}}
+                <li><a href="#{{id}}"><span class="num">{{num}}</span>{{title}}</a></li>
+              {{/each}}
+            {{/if}}
+            </ul>
+          {{/unless}}
       </div>
     {{/each}}
   </aside>
@@ -60,70 +64,109 @@
       <div class="progress"></div>
     </div>
 
-    <header style="background-image: url({{filename}}.png)">
+    <header {{#if hasPreviewImage}}style="background-image: url({{filename}}.png)"{{/if}}>
       <div class="backdrop">
         {{!-- <img src="{{filename}}.png" /> --}}
       </div>
     </header>
 
-    {{#each sections}}
-    <section class="{{#if @first}} summary {{else}} step {{/if}}">
-      <div class="centered-content">
-        {{#if @first}}
-        <div class="summary-header">
-          <img src="{{../filename}}.png" />
-          <small><span class="ifont ifont-filled-time"></span> {{../estimatedReadingTime}}</small>
-        </div>
-        {{/if}}
+    {{#unless isOverview}}
+      {{!-- ------------- --}}
+      {{!-- Article pages --}}
+      {{!-- ------------- --}}
 
-        {{{ rendered }}}
+      {{#each sections}}
+        <section class="{{#if @first}} summary {{else}} step {{/if}}">
+          <div class="centered-content">
+            {{#if @first}}
+            <div class="summary-header">
+              {{#if hasPreviewImage}}
+                <img src="{{../filename}}.png" />
+              {{/if}}
+              <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
+            </div>
+            {{/if}}
 
+            {{{ rendered }}}
+
+            {{#unless @first}}
+            <input type="checkbox" id="complete-{{ id }}" />
+            <div>
+              <label class="button" for="complete-{{ id }}">
+                <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+                <span class="checked">Mark step as incomplete</span>
+              </label>
+
+              <div class="completion ifont ifont-lrn_icon_finish"></div>
+            </div>
+            {{/unless}}
+          </div>
+        </section>
+
+        {{!-- add separator between each step/section --}}
         {{#unless @first}}
-        <input type="checkbox" id="complete-{{ id }}" />
-        <div>
-          <label class="button" for="complete-{{ id }}">
-            <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
-            <span class="checked">Mark step as incomplete</span>
-          </label>
-
-          <div class="completion ifont ifont-lrn_icon_finish"></div>
-        </div>
+          {{#unless @last}}
+            <div class="step-separator"></div>
+          {{/unless}}
         {{/unless}}
-      </div>
-    </section>
 
-    {{!-- add separator between each step/section --}}
-    {{#unless @first}}
-      {{#unless @last}}
-        <div class="step-separator"></div>
-      {{/unless}}
+      {{/each}}
+
+      <div class="step-separator"></div>
+
+      <section class="step final">
+        <div class="centered-content">
+          <p><small>Finished {{current.num}} of {{current.total}}:</small></p>
+          <h3>{{title}}</h3>
+
+          {{!-- TODO: Use different wording here --}}
+          {{#if next}}
+            <p><small>Next:</small></p>
+            <h3>{{next.num}}. {{next.title}}</h3>
+          {{else}}
+            <p><small>Congratulations, you've made it!</small></p>
+          {{/if}}
+
+          {{#if next}}
+            <a href="{{next.filename}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
+            <p><a href="{{next.filename}}.html" class="button incomplete">Continue without marking complete</a></p>
+          {{else}}
+            <p>👏👏👏</p>
+          {{/if}}
+        </div>
+      </section>
+
+    {{else}}
+      {{!-- -------------- --}}
+      {{!-- Index/Overview --}}
+      {{!-- -------------- --}}
+
+      <section class="summary">
+        <div class="centered-content">
+          <div class="summary-header">
+            {{#if sections.[0].hasPreviewImage}}
+              <img src="{{filename}}.png" />
+            {{/if}}
+            <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
+          </div>
+
+          {{{ rendered }}}
+        </div>
+
+        {{{ sections.[0].rendered }}}
+      </section>
+
+      <ul>
+      {{#each sidebar}}
+        <li>
+          {{#if hasPreviewImage}}
+            <img src="{{filename}}.png" />
+          {{/if}}
+        </li>
+      {{/each}}
+      </ul>
+
     {{/unless}}
-
-    {{/each}}
-
-    <div class="step-separator"></div>
-
-    <section class="step final">
-      <div class="centered-content">
-        <p><small>Finished {{current.num}} of {{current.total}}:</small></p>
-        <h3>{{title}}</h3>
-
-        {{!-- TODO: Use different wording here --}}
-        {{#if next}}
-          <p><small>Next:</small></p>
-          <h3>{{next.num}}. {{next.title}}</h3>
-        {{else}}
-          <p><small>Congratulations, you've made it!</small></p>
-        {{/if}}
-
-        {{#if next}}
-          <a href="{{next.filename}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
-          <p><a href="{{next.filename}}.html" class="button incomplete">Continue without marking complete</a></p>
-        {{else}}
-          <p>👏👏👏</p>
-        {{/if}}
-      </div>
-    </section>
 
   </main>
 

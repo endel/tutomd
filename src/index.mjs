@@ -23,6 +23,10 @@ md.use(markdownItIns)
 md.use(markdownItMark);
 // md.use(markdownItFootnote); // why footnotes are not working?
 
+Handlebars.registerHelper('wordCountToMinutes', function (wordCount) {
+  return forHumans(Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60));
+});
+
 function parseTitle(contents) {
   const tokens = md.parse(contents);
   const index = tokens.findIndex((token) => token.type === "heading_open");
@@ -78,8 +82,12 @@ cli
   .option("--prism-theme <name>", "PrismJS theme", { default: "okaidia" })
   .option("--out <dir>", "Output directory", { default: "output" })
   .action((files, options) => {
+    const copiedFiles = [];
+
     // copy files (that aren't Markdown) over
     files.filter(file => !file.endsWith(".md")).forEach(src => {
+      copiedFiles.push(path.basename(src));
+
       const destiny = path.resolve(options.out, path.basename(src));
       fs.copyFileSync(src, destiny);
       console.log("Copying", `'${src}'`, "to", `'${destiny}'`);
@@ -93,11 +101,30 @@ cli
     const fileContents = {};
 
     const sidebar = files.map((file, i) => {
+      const filename = path.basename(file, ".md"); // FIXME: don't duplicate path.basename() here
       fileContents[file] = fs.readFileSync(file).toString();
+
+      let [num, ..._] = filename.split("-");
+      num = parseInt(num);
+
+      const contents = fileContents[file];
+      const rawSections = contents.split("---").map(content => content.trim());
+      let wordCount = 0;
+
+      rawSections.map((section, j) => {
+        // early return if no content
+        if (section.length === 0) { return ""; }
+        wordCount += getWordCount(md.parse(section));
+      });
+
       return {
-        num: i + 1,
+        isOverview: (num === 0),
+        num,
         title: parseTitle(fileContents[file]),
-        filename: path.basename(file, ".md")// FIXME: don't duplicate path.basename() here
+        hasPreviewImage: (copiedFiles.indexOf(`${filename}.png`) >= 0),
+        wordCount,
+        filename,
+        rawSections,
       };
     });
 
@@ -108,24 +135,18 @@ cli
       const currentSidebar = JSON.parse(JSON.stringify(sidebar));
       currentSidebar[i].sections = [];
 
-      const contents = fileContents[file];
-      const rawSections = contents.split("---").map(content => content.trim());
-      let wordCount = 0;
-
       // TODO: rename "sections" to "steps"?
-      const sections = rawSections.map((section, j) => {
+      const sections = sidebar[i].rawSections.map((section, j) => {
         // early return if no content
         if (section.length === 0) { return ""; }
 
         let rendered = md.render(section);
         let id;
 
-        const sectionTokens = md.parse(section);
-        wordCount += getWordCount(sectionTokens);
-
         if (j > 0) {
           // no need to get the title from the section, so we can replace with
           // the number of it into the rendered
+          const sectionTokens = md.parse(section);
           const titleToken = sectionTokens.find((token) => token.type === "heading_open");
           const titleIndex = sectionTokens.indexOf(titleToken);
           const title = sectionTokens[titleIndex + 1].content;
@@ -138,27 +159,27 @@ cli
         return { rendered, id };
       });
 
-      const tokens = md.parse(contents);
+      const tokens = md.parse(fileContents[file]);
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
+        isOverview: (sidebar[i].isOverview),
         current: {
           num: i + 1,
           total: files.length
         },
-        estimatedReadingTime: forHumans(Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60)),
+        wordCount: (
+          (sidebar[i].isOverview)
+            ? sidebar.reduce((acc, cur) => acc += cur.wordCount, 0)
+            : sidebar[i].wordCount
+        ),
         filename,
         next,
         title: tokens[firstTitleIndex + 1].content,
         sidebar: currentSidebar,
         sections,
+        hasPreviewImage: (copiedFiles.indexOf(`${filename}.png`) >= 0),
       };
-
-      // sections.forEach((section) => {
-      //   console.log("NEW SECTION!");
-      //   console.log(md.render(section));
-      //   console.log("...");
-      // });
 
       const html = template(data);
 
@@ -167,9 +188,6 @@ cli
 
       // write html file into the out directory.
       fs.writeFileSync(path.resolve(options.out, `${filename}.html`) , html);
-
-      // TODO: generate image preview for the section, if none was provided
-
     });
 
     /**
@@ -178,12 +196,7 @@ cli
     const themeCSS = fs.readFileSync(options.theme).toString();
     const iconsCSS = fs.readFileSync(path.resolve("template", "icons.css")).toString();
 
-    // // Syntax highlight: prism.css + theme file
-    // const prismCSS = fs.readFileSync(path.resolve("node_modules", "prismjs", "themes", "prism.css")).toString();
-    // const prismCSSTheme = fs.readFileSync(path.resolve("node_modules", "prismjs", "themes", `prism-${options.prismTheme}.css`)).toString();
-
     fs.writeFileSync(`${options.out}/theme.css`, `${iconsCSS}${themeCSS}`);
-    // fs.writeFileSync(`${options.out}/theme.css`, themeCSS);
   });
 
 cli.help();
