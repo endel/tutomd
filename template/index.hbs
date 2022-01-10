@@ -29,7 +29,7 @@
   </script>
 
 </head>
-<body class="line-numbers has-preview-{{hasPreviewImage}}">{{!-- Syntax highlight with line numbers --}}
+<body class="line-numbers has-preview-{{hasPreviewImage}} is-overview-{{isOverview}}">{{!-- Syntax highlight with line numbers --}}
 
   {{!-- Sidebar --}}
   <aside>
@@ -80,7 +80,7 @@
           <div class="centered-content">
             {{#if @first}}
             <div class="summary-header">
-              {{#if hasPreviewImage}}
+              {{#if ../hasPreviewImage}}
                 <img src="{{../filename}}.png" />
               {{/if}}
               <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
@@ -158,11 +158,22 @@
 
       <ul>
       {{#each sidebar}}
+        {{#unless isOverview}}
         <li>
-          {{#if hasPreviewImage}}
-            <img src="{{filename}}.png" />
-          {{/if}}
+          <a href="#">
+            <div class="thumbnail" style="{{#if hasPreviewImage}} background-image: url({{filename}}.png) {{/if}}">
+            </div>
+            <span class="data">
+              <h3>{{title}}</h3>
+              <p>
+                <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
+                •
+                <small><span class="ifont ifont-filled-time"></span> {{num}}/{{../current.total}}</small>
+              </p>
+            </span>
+          </a>
         </li>
+        {{/unless}}
       {{/each}}
       </ul>
 

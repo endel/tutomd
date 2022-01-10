@@ -128,6 +128,8 @@ cli
       };
     });
 
+    const total = sidebar[sidebar.length - 1].num;
+
     files.forEach((file, i) => {
       const filename = path.basename(file, ".md");
       const next = sidebar[i + 1];
@@ -165,8 +167,8 @@ cli
       const data = {
         isOverview: (sidebar[i].isOverview),
         current: {
-          num: i + 1,
-          total: files.length
+          num: sidebar[i].num,
+          total
         },
         wordCount: (
           (sidebar[i].isOverview)

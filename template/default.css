@@ -6,6 +6,10 @@
   --secondary-color: rgb(166, 166, 166);
   --complete-color: rgb(100, 206, 92);
   --progress-height: .5rem;
+
+  --content-width: 800px;
+  --content-border-radius: 0.5em;
+  --content-box-shadow: 0 5px 10px 0 rgb(0 0 0 / 10%);
 }
 
 /* CSS RESET */
@@ -271,9 +275,7 @@ section.summary h2 {
   color: #fff;
 }
 
-body.has-preview-true section.summary .summary-header {
-  margin-top: -110px;
-}
+section.summary .summary-header { margin-top: -100px; }
 section.summary .summary-header img {
   border-radius: 0.4em;
   width: 150px;
@@ -305,14 +307,14 @@ section.summary + section.step {
 
 /* all step boxes */
 section.step {
-  max-width: 800px;
+  max-width: var(--content-width);
   margin-left: auto;
   margin-right: auto;
   /* margin-left: var(--step-margin);
   margin-right: var(--step-margin); */
   padding: 5em 5em 2.5em 5em;
-  border-radius: 0.5em;
-  box-shadow: 0 5px 10px 0 rgb(0 0 0 / 10%);
+  border-radius: var(--content-border-radius);
+  box-shadow: var(--content-box-shadow);
   font-size: 16px;
   line-height: 24px;
   color: rgb(51, 51, 51);
@@ -434,4 +436,33 @@ body.in-content .progress-bar-container { opacity: 1; }
   height: 100%;
   float: left;
   transition: width 0.1s;
+}
+
+/* overview / index page style */
+body.is-overview-true main > ul {
+  margin: 0 auto;
+  margin-top: 3em;
+  max-width: var(--content-width);
+}
+
+body.is-overview-true main > ul li {
+  margin-bottom: 3em;
+}
+
+body.is-overview-true main > ul a {
+  display: flex;
+  box-shadow: var(--content-box-shadow);
+  border-radius: var(--content-border-radius);
+  overflow: hidden;
+  height: 220px;
+}
+
+body.is-overview-true main > ul .thumbnail {
+  display: inherit;
+  width: 40%;
+  background-size: cover;
+}
+body.is-overview-true main > ul .data {
+  width: 60%;
+  padding: 20px 32px;
 }
