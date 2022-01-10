@@ -197,8 +197,11 @@ cli
      */
     const themeCSS = fs.readFileSync(options.theme).toString();
     const iconsCSS = fs.readFileSync(path.resolve("template", "icons.css")).toString();
+    const additionalCSS = options.additionalCSS
+      ? fs.readFileSync(options.additionalCSS).toString()
+      : "";
 
-    fs.writeFileSync(`${options.out}/theme.css`, `${iconsCSS}${themeCSS}`);
+    fs.writeFileSync(`${options.out}/theme.css`, `${iconsCSS}${themeCSS}${additionalCSS}`);
   });
 
 cli.help();

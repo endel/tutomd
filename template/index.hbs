@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="theme.css" />
 
   {{!-- Syntax highlight: PrismJS --}}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.css">
+  {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.css"> --}}
+  {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.css"> --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.css">
 
   <title>{{ title }}</title>
@@ -142,14 +142,14 @@
       {{!-- -------------- --}}
 
       <section class="summary">
-        <div class="centered-content">
           <div class="summary-header">
-            {{#if sections.[0].hasPreviewImage}}
+            {{#if sidebar.[0].hasPreviewImage}}
               <img src="{{filename}}.png" />
             {{/if}}
             <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
           </div>
 
+        <div class="centered-content">
           {{{ rendered }}}
         </div>
 
@@ -164,11 +164,10 @@
             <div class="thumbnail" style="{{#if hasPreviewImage}} background-image: url({{filename}}.png) {{/if}}">
             </div>
             <span class="data">
-              <h3>{{title}}</h3>
+              <h2>{{title}}</h2>
               <p>
+                <small><span class="ifont ifont-lrn_icon_track_course"></span> {{num}}/{{../current.total}}</small>
                 <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
-                •
-                <small><span class="ifont ifont-filled-time"></span> {{num}}/{{../current.total}}</small>
               </p>
             </span>
           </a>
@@ -210,14 +209,30 @@
     const completionCheckboxes = document.querySelectorAll('.step input[type="checkbox"]');
     const currentSidebarSection = Array.from(sidebarSections).findIndex((section) => section.classList.contains("current"));
 
+    //
+    // check for previously completed sections on the sidebar
+    //
+    const sidebar = [];
+    {{#each sidebar}}
+      {{#unless isOverview}}
+        sidebar.push("{{filename}}");
+        if (JSON.parse(localStorage.getItem("{{filename}}") || "{}").completed) {
+          sidebarSections[{{@index}}].classList.add("complete");
+        }
+      {{/unless}}
+    {{/each}}
+
     let allowScroll = true; // FIXME: this is too ugly...
 
     const completionCacheKey = "{{filename}}";
     let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
-    const isAllComplete = () => Array.from(sidebarItems).every((_, i) => cachedCompletionStatus[i]);
+
+    const isAllLocalStepsComplete = () => Array.from(sidebarItems).every((_, i) => cachedCompletionStatus[i]);
+    const isAllComplete = () => sidebar.every((filename) => JSON.parse(localStorage.getItem(filename) || "{}").completed);
+
     const cacheCompletion = () => {
       const previousCompletionStatus = cachedCompletionStatus.completed;
-      cachedCompletionStatus.completed = isAllComplete();
+      cachedCompletionStatus.completed = isAllLocalStepsComplete();
       if (previousCompletionStatus !== cachedCompletionStatus.completed) {
         if (cachedCompletionStatus.completed) {
           sidebarSections[currentSidebarSection].classList.add("complete");
@@ -310,15 +325,6 @@
     //
     // TODO / IDEA: automatically scroll to the last unfinished step.
     //
-
-    //
-    // check for previously completed sections on the sidebar
-    //
-    {{#each sidebar}}
-      if (JSON.parse(localStorage.getItem("{{filename}}") || "{}").completed) {
-        sidebarSections[{{@index}}].classList.add("complete");
-      }
-    {{/each}}
 
     // Reading progress/scroll
     const progressBarEl = document.querySelector(".progress-bar-container .progress");
