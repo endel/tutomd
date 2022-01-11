@@ -7,7 +7,8 @@ import mkdirp from 'mkdirp';
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItIns from "markdown-it-anchor";
 import markdownItMark from "markdown-it-mark";
-import markdownItFootnote from "markdown-it-footnote";
+import markdownItMultimdTable from "markdown-it-multimd-table";
+// import markdownItFootnote from "markdown-it-footnote";
 import { createUnplashAPI, getImage } from "./unsplash";
 import { format } from "date-and-time";
 import colors from "colors";
@@ -26,6 +27,9 @@ const md = markdownIt({
 md.use(markdownItAnchor, {});
 md.use(markdownItIns)
 md.use(markdownItMark);
+md.use(markdownItMultimdTable, {
+  multiline: true
+});
 // md.use(markdownItFootnote); // why footnotes are not working?
 
 const unsplashSearchKeyword = "search:";
@@ -120,7 +124,7 @@ cli
   .action(async (files, options) => {
     // configure handlebars
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
-    Handlebars.registerHelper('formatDate', (date) => format(date, options.dateFormat));
+    Handlebars.registerHelper('formatDate', (date) => date && format(date, options.dateFormat));
 
     // create out directory
     mkdirp.sync(options.out);
@@ -152,6 +156,12 @@ cli
     const sidebar = await Promise.all(filenames.map(async (filename, i) => {
       const file = files.get(filename);
 
+      //
+      // TODO: instead of splitting the arbitraty "---" string here, we should
+      // identify it as a TOKEN instead.
+      //
+      // PROBLEM: table headings might use "---", causing other parsing problems.
+      //
       const rawSections = file.contents.split("---").map(content => content.trim());
       let wordCount = 0;
 
@@ -228,6 +238,7 @@ cli
           // no need to get the title from the section, so we can replace with
           // the number of it into the rendered
           const titleToken = sectionTokens.find((token) => token.type === "heading_open");
+          console.log({ titleToken });
           const titleIndex = sectionTokens.indexOf(titleToken);
           const title = sectionTokens[titleIndex + 1].content;
           rendered = rendered.replace(title, `${j}. ${title}`)

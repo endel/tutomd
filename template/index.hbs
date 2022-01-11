@@ -83,8 +83,8 @@
               {{#if ../hasPreviewImage}}
                 <img src="{{../image}}" />
               {{/if}}
-              <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
               <small><span class="ifont ifont-filled-calendar"></span> {{formatDate ../date}}</small>
+              <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
             </div>
             {{/if}}
 
@@ -148,6 +148,7 @@
             {{#if sidebar.[0].hasPreviewImage}}
               <img src="{{image}}" />
             {{/if}}
+            <small><span class="ifont ifont-filled-calendar"></span> {{formatDate date}}</small>
             <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
           </div>
 
