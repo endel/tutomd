@@ -25,8 +25,8 @@ const md = markdownIt({
 });
 
 md.use(markdownItAnchor, {});
-md.use(markdownItIns)
-md.use(markdownItMark);
+md.use(markdownItIns); // support ++inserted++ for '<p><ins>inserted</ins></p>'
+md.use(markdownItMark); // support ==marked== for '<p><mark>marked</mark></p>'
 md.use(markdownItMultimdTable, {
   multiline: true
 });
@@ -106,7 +106,7 @@ class File {
       this.filename = segments[0];
 
     } else {
-      this.filename = segments.join('-');
+      this.filename = filename;
     }
 
     this.extname = extname;

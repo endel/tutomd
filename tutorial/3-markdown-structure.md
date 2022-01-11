@@ -1,4 +1,4 @@
-![](search:markdown)
+![](search:structure)
 
 # Structure Guide and Markdown Essentials
 
@@ -11,7 +11,7 @@ Here you will learn:
 
 ---
 
-# Markdown essentials
+# Markdown Essentials
 
 | Element | Markdown Syntax |
 |--|--|
@@ -55,19 +55,26 @@ Here you will learn:
 |         | ```         |
 
 
+## Using HTML
 
-<!--
+HTML is supported inside Markdown. You may add any HTML tag you'd like, such as YouTube iframes:
 
-|              |               |
-|    - Item 1  | - Item 1      | \
-|    - Item 2  | - Item 2      |
-|    ```python | ```python       \
-|    .1 + .2   | .1 + .2         \
-|    ```       | ```           |
--->
+```html
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/moduMHp7TKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+```
 
-## HTML is allowed
+Result:
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/moduMHp7TKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Markdown
+---
+
+# `tutomd` Directory Structure
+
+Heyyy
+
+![Directory Structure](3-directory-structure.png)
+
+## ...
+
+- ...
