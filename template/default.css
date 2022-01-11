@@ -137,7 +137,8 @@ aside .section.complete .info { color: var(--complete-color); }
 aside .section:not(.complete) .info .ifont { display: none; font-size: 18px; }
 
 /* current section! */
-aside .section.current .info .thumbnail { border: 3px solid var(--secondary-color); }
+body.is-overview-true aside .section.is-overview-true .info .thumbnail,/* on overview page */
+aside .section.current .info .thumbnail { border: 3px solid var(--secondary-color); }/* on other pages */
 
 aside .section .info .data {
   display: inline-block;
