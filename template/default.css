@@ -266,6 +266,15 @@ section ul li::before {
   color:rgb(51, 51, 51);
 }
 
+hr {
+  border: 0;
+  border-bottom: 1px solid transparent;
+  margin-bottom: 24px;
+}
+
+.summary hr { border-bottom-color: hsla(0,0%,100%,.3); }
+.step hr { border-bottom-color: #e0e0e0; }
+
 blockquote {
   background: rgb(235, 235, 235);
   margin: 2em;
