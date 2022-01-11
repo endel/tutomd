@@ -6,8 +6,6 @@ You are going to need a few tools installed on your local machine before getting
 
 In this tutorial, you'll be able to set up your local environment to use `tutomd`.
 
----
-
 # Install Software Requirements
 
 ## Download and Install Node.js
@@ -23,8 +21,6 @@ It is recommended to install the LTS version:
 You're going to need a text editor that supports editing Markdown (`*.md`) files.
 
 **[Click here to Download Visual Studio Code](https://code.visualstudio.com/download)**
-
----
 
 # Install the `tutomd` tool
 

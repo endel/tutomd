@@ -9,8 +9,6 @@ Here you will learn:
 - Essential Markdown tags
 - Recommended text and file structure for best output
 
----
-
 # Markdown Essentials
 
 | Element | Markdown Syntax |
@@ -45,7 +43,7 @@ Here you will learn:
 |         | ``` \
 |         | ````         |
 | Horizontal rule    | ```         \
-|         | -- \
+|         | --- \
 |         | ```         |
 | Link | ```         \
 |         | [title](https://www.example.com) \
@@ -66,8 +64,6 @@ HTML is supported inside Markdown. You may add any HTML tag you'd like, such as 
 **Result:**
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/moduMHp7TKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
----
 
 # Sidebar Rules
 
@@ -97,8 +93,6 @@ You will need an account on unsplash.com, and a developer "Access Key" in order 
 
 Voila!
 
----
-
 # Formatting the article
 
 As you've seen on [What to expect](1-what-to-expect.html), an article has a summary, and an unlimited amount of step sections.
@@ -127,18 +121,17 @@ Contents of the first step
 Contents of the second step
 ```
 
----
-
 # Generating the `.html` files from the command-line
 
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
+Now, we're going to use the `tutomd` from the command-line in order to convert our `.md` files into `.html`.
 
 ```
 tutomd generate ./path/to/markdown/* --out html
 ```
 
+You should see an output that looks like this:
+
 ```
-tutomd generate ./path/to/markdown/* --out html --out html
 Copying from tutorial/3-directory-structure.png to /Users/endel/Projects/tutomd/html/3-directory-structure.png
 Write /Users/endel/Projects/tutomd/html/index.html
 Write /Users/endel/Projects/tutomd/html/1-what-to-expect.html
@@ -147,76 +140,6 @@ Write /Users/endel/Projects/tutomd/html/3-markdown-structure.html
 Write /Users/endel/Projects/tutomd/html/theme.css
 ```
 
----
+# Questions? Ideas?
 
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
-```
-tutomd generate ./path/to/markdown/* --out html
-```
-
-```
-tutomd generate ./path/to/markdown/* --out html --out html
-Copying from tutorial/3-directory-structure.png to /Users/endel/Projects/tutomd/html/3-directory-structure.png
-Write /Users/endel/Projects/tutomd/html/index.html
-Write /Users/endel/Projects/tutomd/html/1-what-to-expect.html
-Write /Users/endel/Projects/tutomd/html/2-installing-tutomd.html
-Write /Users/endel/Projects/tutomd/html/3-markdown-structure.html
-Write /Users/endel/Projects/tutomd/html/theme.css
-```
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
-
----
-
-# Generating the `.html` files from the command-line
-
-Now, we're going to use the `tutomd` from the command-line to convert our `.md` files into `.html`.
+This project is open-source and is available at [endel/tutomd](https://github.com/endel/tutomd). Feel free to create a PR and/or interact on GitHub issues.

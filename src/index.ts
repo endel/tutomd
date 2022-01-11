@@ -156,34 +156,27 @@ cli
     const sidebar = await Promise.all(filenames.map(async (filename, i) => {
       const file = files.get(filename);
 
-      //
-      // TODO: instead of splitting the arbitraty "---" string here, we should
-      // identify it as a TOKEN instead.
-      //
-      // PROBLEM: table headings might use "---", causing other parsing problems.
-      //
-      const rawSections = file.contents.split("---").map(content => content.trim());
       let wordCount = 0;
 
-      const tokensPerSection = rawSections.map((section, j) => {
-        // early return if no content
-        if (section.length === 0) { return ""; }
-
-        const tokens = md.parse(section, undefined);
-        wordCount += getWordCount(tokens);
-
-        return tokens;
+      const contentTokens = md.parse(file.contents, undefined);
+      const h1Tokens = contentTokens.filter((token) => token.type === "heading_open" && token.tag === "h1");
+      const tokensPerSection = h1Tokens.map((token, i) => {
+        const startIndex = contentTokens.indexOf(token);
+        const endIndex = (h1Tokens[i + 1] && contentTokens.indexOf(h1Tokens[i + 1])) || contentTokens.length - 1;
+        const sectionTokens = contentTokens.slice(startIndex, endIndex);
+        wordCount += getWordCount(sectionTokens);
+        return sectionTokens;
       });
 
       // finds main title
-      const index = tokensPerSection[0].findIndex((token) => token.type === "heading_open");
-      const title = tokensPerSection[0][index + 1].content;
+      const index = contentTokens.indexOf(h1Tokens[0]);
+      const title = contentTokens[index + 1].content;
       let image = (copiedFiles.indexOf(`${filename}.png`) !== -1)
         ? `${filename}.png` // allow to provide an image
         : undefined;
 
       // finds first image tag
-      const imgToken = getFirstImageToken(tokensPerSection[0]);
+      const imgToken = getFirstImageToken(contentTokens);
       if (imgToken)  {
         const imgTokenSrc = imgToken.children[0].attrGet("src");
 
@@ -206,7 +199,7 @@ cli
         hasPreviewImage: (!!image),
         wordCount,
         filename,
-        rawSections,
+        tokensPerSection,
       };
     }));
 
@@ -221,16 +214,12 @@ cli
       currentSidebar[i].sections = [];
 
       // TODO: rename "sections" to "steps"?
-      const sections = sidebar[i].rawSections.map((section, j) => {
-        // early return if no content
-        if (section.length === 0) { return ""; }
-
-        const sectionTokens = md.parse(section, undefined);
+      const sections = sidebar[i].tokensPerSection.map((sectionTokens, j) => {
         const firstImageToken = (j === 0) && getFirstImageToken(sectionTokens);
 
         let rendered = (firstImageToken)
           ? md.renderer.render(sectionTokens.filter(token => token !== firstImageToken), md.options, undefined)
-          : md.render(section);
+          : md.renderer.render(sectionTokens, md.options, undefined);
 
         let id;
 
