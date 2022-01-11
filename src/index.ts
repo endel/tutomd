@@ -118,6 +118,7 @@ const cli = cac();
 cli
   .command('generate [...files]', 'Generate tutorial for file')
   .option("--out <dir>", "Output directory", { default: "output" })
+  .option("--created-at <timestamp>", "Tutorial creation date (Number of milliseconds since the Unix Epoch)", { default: new Date() })
   .option("--date-format <format>", "Date format [More info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
   .option("--theme <css-file>", "Theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
   .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images")
@@ -242,7 +243,7 @@ cli
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
-        date: new Date(),
+        date: options.createdAt,
         isOverview: (sidebar[i].isOverview),
         current: {
           num: sidebar[i].num,
