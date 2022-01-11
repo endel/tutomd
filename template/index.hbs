@@ -36,7 +36,7 @@
     {{#each sidebar}}
       <div class="section{{#if sections}} current{{/if}} is-overview-{{isOverview}}">
         <div class="info">
-          <div class="thumbnail" {{#if hasPreviewImage}} style="background-image: url({{filename}}.png); background-color: transparent;" {{/if}}>
+          <div class="thumbnail" {{#if hasPreviewImage}} style="background-image: url({{image}}); background-color: transparent;" {{/if}}>
             <div class="ifont ifont-lrn_icon_finish"></div>
           </div>
           <div class="data">
@@ -64,9 +64,9 @@
       <div class="progress"></div>
     </div>
 
-    <header {{#if hasPreviewImage}}style="background-image: url({{filename}}.png)"{{/if}}>
+    <header {{#if hasPreviewImage}}style="background-image: url({{image}})"{{/if}}>
       <div class="backdrop">
-        {{!-- <img src="{{filename}}.png" /> --}}
+        {{!-- <img src="{{image}}" /> --}}
       </div>
     </header>
 
@@ -81,7 +81,7 @@
             {{#if @first}}
             <div class="summary-header">
               {{#if ../hasPreviewImage}}
-                <img src="{{../filename}}.png" />
+                <img src="{{../image}}" />
               {{/if}}
               <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
             </div>
@@ -144,7 +144,7 @@
       <section class="summary">
           <div class="summary-header">
             {{#if sidebar.[0].hasPreviewImage}}
-              <img src="{{filename}}.png" />
+              <img src="{{image}}" />
             {{/if}}
             <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
           </div>
@@ -160,8 +160,8 @@
       {{#each sidebar}}
         {{#unless isOverview}}
         <li>
-          <a href="#">
-            <div class="thumbnail" style="{{#if hasPreviewImage}} background-image: url({{filename}}.png) {{/if}}">
+          <a href="{{filename}}.html">
+            <div class="thumbnail" style="{{#if hasPreviewImage}} background-image: url({{image}}) {{/if}}">
             </div>
             <span class="data">
               <h2>{{title}}</h2>

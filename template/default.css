@@ -237,6 +237,7 @@ blockquote {
 /* summary / header */
 header {
   background-size: cover;
+  background-position: center;
   height: 100px;
   position: relative;
   background-color:rgb(51, 51, 51);
@@ -445,9 +446,8 @@ body.is-overview-true main > ul {
   max-width: var(--content-width);
 }
 
-body.is-overview-true main > ul li {
-  margin-bottom: 3em;
-}
+body.is-overview-true main > ul li { margin-bottom: 2em; }
+body.is-overview-true main > ul li:last-child { margin-bottom: 8em; }
 
 body.is-overview-true main > ul a {
   display: flex;
@@ -456,6 +456,7 @@ body.is-overview-true main > ul a {
   overflow: hidden;
   height: 220px;
   text-decoration: none;
+  background: #fff;
   transition: box-shadow 0.2s;
 }
 body.is-overview-true main > ul a:hover {

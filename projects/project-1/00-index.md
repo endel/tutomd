@@ -1,3 +1,5 @@
+![](search:something)
+
 # Title of the whole tutorial
 
 Start here to learn Visual Scripting, whether you are new to Unity or an experienced Unity programmer.

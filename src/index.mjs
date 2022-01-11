@@ -8,6 +8,7 @@ import markdownItAnchor from "markdown-it-anchor";
 import markdownItIns from "markdown-it-anchor";
 import markdownItMark from "markdown-it-mark";
 import markdownItFootnote from "markdown-it-footnote";
+import { createUnplashAPI, getImage } from "./unsplash.mjs";
 
 const READING_WORDS_PER_MINUTE = 180;
 
@@ -23,15 +24,11 @@ md.use(markdownItIns)
 md.use(markdownItMark);
 // md.use(markdownItFootnote); // why footnotes are not working?
 
+const unsplashSearchKeyword = "search:";
+
 Handlebars.registerHelper('wordCountToMinutes', function (wordCount) {
   return forHumans(Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60));
 });
-
-function parseTitle(contents) {
-  const tokens = md.parse(contents);
-  const index = tokens.findIndex((token) => token.type === "heading_open");
-  return tokens[index + 1].content;
-}
 
 function getWordCount(children) {
   let wordCount = 0;
@@ -74,14 +71,26 @@ function forHumans(seconds) {
   return returntext.trim();
 }
 
+function getFirstImageToken (tokens)  {
+  const index = tokens.findIndex((token) => token.type === "inline" && token.children?.[0]?.tag === "img");
+
+  if (index !== -1) {
+    return tokens[index];
+
+  } else {
+    return false;
+  }
+}
+
+
 const cli = cac();
 
 cli
   .command('generate [...files]', 'Generate tutorial for file')
-  .option("--theme <name>", "Theme path", { default: "template/default.css" })
-  .option("--prism-theme <name>", "PrismJS theme", { default: "okaidia" })
   .option("--out <dir>", "Output directory", { default: "output" })
-  .action((files, options) => {
+  .option("--theme <name>", "Theme path", { default: "template/default.css" })
+  .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images", { default: "" })
+  .action(async (files, options) => {
     const copiedFiles = [];
 
     // copy files (that aren't Markdown) over
@@ -100,7 +109,7 @@ cli
     const template = Handlebars.compile(source);
     const fileContents = {};
 
-    const sidebar = files.map((file, i) => {
+    const sidebar = await Promise.all(files.map(async (file, i) => {
       const filename = path.basename(file, ".md"); // FIXME: don't duplicate path.basename() here
       fileContents[file] = fs.readFileSync(file).toString();
 
@@ -111,22 +120,50 @@ cli
       const rawSections = contents.split("---").map(content => content.trim());
       let wordCount = 0;
 
-      rawSections.map((section, j) => {
+      const tokensPerSection = rawSections.map((section, j) => {
         // early return if no content
         if (section.length === 0) { return ""; }
-        wordCount += getWordCount(md.parse(section));
+
+        const tokens = md.parse(section);
+        wordCount += getWordCount(tokens);
+
+        return tokens;
       });
+
+      // finds main title
+      const index = tokensPerSection[0].findIndex((token) => token.type === "heading_open");
+      const title = tokensPerSection[0][index + 1].content;
+      let image = (copiedFiles.indexOf(`${filename}.png`) !== -1)
+        ? `${filename}.png` // allow to provide an image
+        : undefined;
+
+      // finds first image tag
+      const imgToken = getFirstImageToken(tokensPerSection[0]);
+      if (imgToken)  {
+        const imgTokenSrc = imgToken.children[0].attrGet("src");
+
+        // use unplash to search for image.
+        const unsplashSearch = imgTokenSrc.match(`${unsplashSearchKeyword}(.*)`, "i");
+        if (unsplashSearch && unsplashSearch[1]) {
+          createUnplashAPI(options.unsplashAccessKey);
+          image = await getImage(unsplashSearch[1]);
+
+        } else {
+          image = imgTokenSrc;
+        }
+      }
 
       return {
         isOverview: (num === 0),
         num,
-        title: parseTitle(fileContents[file]),
-        hasPreviewImage: (copiedFiles.indexOf(`${filename}.png`) >= 0),
+        title,
+        image,
+        hasPreviewImage: (!!image),
         wordCount,
         filename,
         rawSections,
       };
-    });
+    }));
 
     const total = sidebar[sidebar.length - 1].num;
 
@@ -142,13 +179,18 @@ cli
         // early return if no content
         if (section.length === 0) { return ""; }
 
-        let rendered = md.render(section);
+        const sectionTokens = md.parse(section);
+        const firstImageToken = (j === 0) && getFirstImageToken(sectionTokens);
+
+        let rendered = (firstImageToken)
+          ? md.renderer.render(sectionTokens.filter(token => token !== firstImageToken), md.options)
+          : md.render(section);
+
         let id;
 
         if (j > 0) {
           // no need to get the title from the section, so we can replace with
           // the number of it into the rendered
-          const sectionTokens = md.parse(section);
           const titleToken = sectionTokens.find((token) => token.type === "heading_open");
           const titleIndex = sectionTokens.indexOf(titleToken);
           const title = sectionTokens[titleIndex + 1].content;
@@ -176,11 +218,12 @@ cli
             : sidebar[i].wordCount
         ),
         filename,
+        image: sidebar[i].image,
+        hasPreviewImage: (!!sidebar[i].image),
         next,
         title: tokens[firstTitleIndex + 1].content,
         sidebar: currentSidebar,
         sections,
-        hasPreviewImage: (copiedFiles.indexOf(`${filename}.png`) >= 0),
       };
 
       const html = template(data);
@@ -206,4 +249,20 @@ cli
 
 cli.help();
 cli.version('1.0.0');
-cli.parse();
+
+try {
+  // Parse CLI args without running the command
+  cli.parse(process.argv, { run: false })
+
+  // Run the command yourself
+  // You only need `await` when your command action returns a Promise
+  await cli.runMatchedCommand()
+
+} catch (error) {
+  console.error(`\nERROR: ${error.message}\n`);
+
+  cli.outputHelp();
+
+  console.error(`\n${error.stack}\n`);
+  process.exit(1);
+}

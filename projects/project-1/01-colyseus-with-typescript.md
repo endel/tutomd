@@ -1,3 +1,5 @@
+![](search:scripting)
+
 # About Unity Visual Scripting
 
 In this tutorial, you’ll begin setting up Visual Scripting for your first scripts. By the end of this tutorial, you’ll be able to:
