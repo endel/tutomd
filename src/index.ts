@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import cac from "cac";
 import markdownIt from "markdown-it";
-import Handlebars from "handlebars";
+import Handlebars, { decorators } from "handlebars";
 import mkdirp from 'mkdirp';
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItIns from "markdown-it-anchor";
@@ -10,6 +10,7 @@ import markdownItMark from "markdown-it-mark";
 import markdownItFootnote from "markdown-it-footnote";
 import { createUnplashAPI, getImage } from "./unsplash";
 import { format } from "date-and-time";
+import colors from "colors";
 
 const packageJson = require('../package.json');
 
@@ -28,6 +29,11 @@ md.use(markdownItMark);
 // md.use(markdownItFootnote); // why footnotes are not working?
 
 const unsplashSearchKeyword = "search:";
+
+function writeFile(destiny, contents) {
+  console.log(`Write ${colors.green(destiny)}`);
+  fs.writeFileSync(destiny, contents);
+}
 
 function getWordCount(children) {
   let wordCount = 0;
@@ -127,8 +133,9 @@ cli
       copiedFiles.push(`${file.filename}${file.extname}`);
 
       const destiny = path.resolve(options.out, `${file.filename}${file.extname}`);
+
+      console.log("Copying from", colors.yellow(src), "to", colors.green(destiny));
       fs.copyFileSync(src, destiny);
-      console.log("Copying", `'${src}'`, "to", `'${destiny}'`);
     });
 
     // only consider markdown (.md) files
@@ -259,7 +266,7 @@ cli
       const html = template(data);
 
       // write html file into the out directory.
-      fs.writeFileSync(path.resolve(options.out, `${filename}.html`) , html);
+      writeFile(path.resolve(options.out, `${filename}.html`), html);
     });
 
     /**
@@ -271,7 +278,7 @@ cli
       ? fs.readFileSync(options.additionalCSS).toString()
       : "";
 
-    fs.writeFileSync(`${options.out}/theme.css`, `${iconsCSS}${themeCSS}${additionalCSS}`);
+    writeFile(path.resolve(options.out, "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
   });
 
 cli.help();

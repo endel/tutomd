@@ -1,6 +1,6 @@
 {
   "name": "tutomd",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "description": "Structured tutorial generator",
   "main": "index.js",
   "type": "commonjs",
@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "cac": "^6.7.12",
+    "colors": "^1.4.0",
     "date-and-time": "^2.1.0",
     "dateformat": "^5.0.2",
     "ejs": "^3.1.6",
@@ -37,6 +38,7 @@
     "unsplash-js": "^7.0.15"
   },
   "devDependencies": {
+    "@types/colors": "^1.2.1",
     "@types/date-and-time": "^0.13.0",
     "dom-confetti": "^0.2.2",
     "ts-node": "^10.4.0",
