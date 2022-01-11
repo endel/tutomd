@@ -4,12 +4,12 @@ import cac from "cac";
 import markdownIt from "markdown-it";
 import Handlebars from "handlebars";
 import mkdirp from 'mkdirp';
-import dateFormat from "dateformat";
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItIns from "markdown-it-anchor";
 import markdownItMark from "markdown-it-mark";
 import markdownItFootnote from "markdown-it-footnote";
-import { createUnplashAPI, getImage } from "./unsplash.mjs";
+import { createUnplashAPI, getImage } from "./unsplash";
+import { format } from "date-and-time";
 
 const READING_WORDS_PER_MINUTE = 180;
 
@@ -52,7 +52,7 @@ function getWordCount(children) {
  * @return {string}         The phrase describing the amount of time
  */
 function forHumans(seconds) {
-  var levels = [
+  var levels: Array<[number, string]> = [
     [Math.floor(seconds / 31536000), 'years'],
     [Math.floor((seconds % 31536000) / 86400), 'days'],
     [Math.floor(((seconds % 31536000) % 86400) / 3600), 'hours'],
@@ -74,6 +74,10 @@ function getFirstImageToken (tokens)  {
 }
 
 class File {
+  filename: string;
+  extname: string;
+  num: number;
+  contents?: string;
   constructor(fullpath) {
     const extname = path.extname(fullpath);
     const filename = path.basename(fullpath, extname);
@@ -86,7 +90,7 @@ class File {
     const [num, ...segments] = filename.split('-');
     this.num = parseInt(num);
 
-    if (num === 0 && segments[0] === "index") {
+    if (this.num === 0 && segments[0] === "index") {
       this.filename = segments[0];
 
     } else {
@@ -102,13 +106,13 @@ const cli = cac();
 cli
   .command('generate [...files]', 'Generate tutorial for file')
   .option("--out <dir>", "Output directory", { default: "output" })
-  .option("--date-format <format>", "Date format, e.g.: dd/mm/yyyy (More info: https://github.com/felixge/node-dateformat#mask-options)", { default: "mmmm d, yyyy" })
+  .option("--date-format <format>", "Date format, e.g.: dd/mm/yyyy (More info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc)", { default: "MMMM D, YYYY" })
   .option("--theme <name>", "Theme path", { default: "template/default.css" })
   .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images", { default: "" })
   .action(async (files, options) => {
     // configure handlebars
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
-    Handlebars.registerHelper('formatDate', (date) => dateFormat(date, options.dateFormat));
+    Handlebars.registerHelper('formatDate', (date) => format(date, options.dateFormat));
 
     // create out directory
     mkdirp.sync(options.out);
@@ -146,7 +150,7 @@ cli
         // early return if no content
         if (section.length === 0) { return ""; }
 
-        const tokens = md.parse(section);
+        const tokens = md.parse(section, undefined);
         wordCount += getWordCount(tokens);
 
         return tokens;
@@ -202,11 +206,11 @@ cli
         // early return if no content
         if (section.length === 0) { return ""; }
 
-        const sectionTokens = md.parse(section);
+        const sectionTokens = md.parse(section, undefined);
         const firstImageToken = (j === 0) && getFirstImageToken(sectionTokens);
 
         let rendered = (firstImageToken)
-          ? md.renderer.render(sectionTokens.filter(token => token !== firstImageToken), md.options)
+          ? md.renderer.render(sectionTokens.filter(token => token !== firstImageToken), md.options, undefined)
           : md.render(section);
 
         let id;
@@ -226,7 +230,7 @@ cli
         return { rendered, id };
       });
 
-      const tokens = md.parse(file.contents);
+      const tokens = md.parse(file.contents, undefined);
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
@@ -271,19 +275,21 @@ cli
 cli.help();
 cli.version('1.0.0');
 
-try {
+(async function() {
   // Parse CLI args without running the command
-  cli.parse(process.argv, { run: false })
+  cli.parse(process.argv, { run: false });
 
   // Run the command yourself
   // You only need `await` when your command action returns a Promise
-  await cli.runMatchedCommand()
+  try {
+    await cli.runMatchedCommand();
 
-} catch (error) {
-  console.error(`\nERROR: ${error.message}\n`);
+  } catch (error) {
+    console.error(`\nERROR: ${error.message}\n`);
 
-  cli.outputHelp();
+    cli.outputHelp();
 
-  console.error(`\n${error.stack}\n`);
-  process.exit(1);
-}
+    console.error(`\n${error.stack}\n`);
+    process.exit(1);
+  }
+})();

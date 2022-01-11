@@ -1,17 +1,22 @@
 {
   "name": "tutomd",
-  "version": "0.1.0",
-  "type": "module",
-  "description": "",
+  "version": "0.9.0",
+  "description": "Structured tutorial generator",
   "main": "index.js",
-  "bin": "./bin/tutomd.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "type": "commonjs",
+  "bin": {
+    "tutomd": "./bin/tutomd"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "test": "ts-node src/index.ts generate tutorial/* --unsplash-access-key 7rHOgNNtUFaI2bOY61EyZqooBRHcMToGQEwxaGlwSvY --out html",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Endel Dreyer",
+  "license": "MIT",
   "dependencies": {
     "cac": "^6.7.12",
+    "date-and-time": "^2.1.0",
     "dateformat": "^5.0.2",
     "ejs": "^3.1.6",
     "handlebars": "^4.7.7",
@@ -21,11 +26,14 @@
     "markdown-it-ins": "^3.0.1",
     "markdown-it-mark": "^3.0.1",
     "mkdirp": "^1.0.4",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^2.6.6",
     "prismjs": "^1.25.0",
     "unsplash-js": "^7.0.15"
   },
   "devDependencies": {
-    "dom-confetti": "^0.2.2"
+    "@types/date-and-time": "^0.13.0",
+    "dom-confetti": "^0.2.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   }
 }

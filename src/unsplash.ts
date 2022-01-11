@@ -3,7 +3,7 @@ import nodeFetch from 'node-fetch';
 
 let unsplash;
 
-export function createUnplashAPI(accessKey) {
+export async function createUnplashAPI(accessKey) {
   if (!accessKey) {
     throw new Error("Please provide a valid Unsplash Developer API Key: https://unsplash.com/developers");
   }
@@ -11,6 +11,8 @@ export function createUnplashAPI(accessKey) {
   unsplash = createApi({
     // TODO: remove my access key
     accessKey: accessKey || "7rHOgNNtUFaI2bOY61EyZqooBRHcMToGQEwxaGlwSvY",
+
+    // @ts-ignore
     fetch: nodeFetch,
   });
 }

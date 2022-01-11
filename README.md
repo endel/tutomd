@@ -1,5 +1,5 @@
 <div align="center">
-<img src="logo.png?raw=1" width="70%" alt="tutomd" />
+<img src="https://github.com/endel/tutomd/blob/master/logo.png?raw=1" width="70%" alt="tutomd" />
 </div>
 
 # tutomd
