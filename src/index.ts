@@ -162,7 +162,7 @@ cli
       const h1Tokens = contentTokens.filter((token) => token.type === "heading_open" && token.tag === "h1");
       const tokensPerSection = h1Tokens.map((token, i) => {
         const startIndex = contentTokens.indexOf(token);
-        const endIndex = (h1Tokens[i + 1] && contentTokens.indexOf(h1Tokens[i + 1])) || contentTokens.length - 1;
+        const endIndex = (h1Tokens[i + 1] && contentTokens.indexOf(h1Tokens[i + 1])) || contentTokens.length;
         const sectionTokens = contentTokens.slice(startIndex, endIndex);
         wordCount += getWordCount(sectionTokens);
         return sectionTokens;

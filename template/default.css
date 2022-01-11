@@ -31,6 +31,7 @@ small { color: var(--secondary-color); }
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 24px;
 }
 table th, table td {
   padding: 0.5em;

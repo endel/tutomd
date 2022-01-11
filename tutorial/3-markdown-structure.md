@@ -52,6 +52,8 @@ Here you will learn:
 |         | ![alt text](image.jpg) \
 |         | ```         |
 
+[Read more about the Markdown syntax.](https://www.markdownguide.org/cheat-sheet/)
+
 
 ## Using HTML
 
@@ -140,6 +142,10 @@ Write /Users/endel/Projects/tutomd/html/3-markdown-structure.html
 Write /Users/endel/Projects/tutomd/html/theme.css
 ```
 
-# Questions? Ideas?
+# Example
+
+See the source-code of this tutorial [here](https://github.com/endel/tutomd/tree/master/tutorial).
+
+# Questions or Ideas
 
 This project is open-source and is available at [endel/tutomd](https://github.com/endel/tutomd). Feel free to create a PR and/or interact on GitHub issues.
