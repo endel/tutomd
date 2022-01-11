@@ -107,8 +107,8 @@ cli
   .command('generate [...files]', 'Generate tutorial for file')
   .option("--out <dir>", "Output directory", { default: "output" })
   .option("--date-format <format>", "Date format [More info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
-  .option("--theme <css-file>", "Theme path", { default: "template/default.css" })
-  .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images", { default: "" })
+  .option("--theme <css-file>", "Theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
+  .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images")
   .action(async (files, options) => {
     // configure handlebars
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
