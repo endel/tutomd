@@ -4,6 +4,7 @@ import cac from "cac";
 import markdownIt from "markdown-it";
 import Handlebars from "handlebars";
 import mkdirp from 'mkdirp';
+import dateFormat from "dateformat";
 import markdownItAnchor from "markdown-it-anchor";
 import markdownItIns from "markdown-it-anchor";
 import markdownItMark from "markdown-it-mark";
@@ -25,10 +26,6 @@ md.use(markdownItMark);
 // md.use(markdownItFootnote); // why footnotes are not working?
 
 const unsplashSearchKeyword = "search:";
-
-Handlebars.registerHelper('wordCountToMinutes', function (wordCount) {
-  return forHumans(Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60));
-});
 
 function getWordCount(children) {
   let wordCount = 0;
@@ -105,9 +102,14 @@ const cli = cac();
 cli
   .command('generate [...files]', 'Generate tutorial for file')
   .option("--out <dir>", "Output directory", { default: "output" })
+  .option("--date-format <format>", "Date format, e.g.: dd/mm/yyyy (More info: https://github.com/felixge/node-dateformat#mask-options)", { default: "mmmm d, yyyy" })
   .option("--theme <name>", "Theme path", { default: "template/default.css" })
   .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images", { default: "" })
   .action(async (files, options) => {
+    // configure handlebars
+    Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
+    Handlebars.registerHelper('formatDate', (date) => dateFormat(date, options.dateFormat));
+
     // create out directory
     mkdirp.sync(options.out);
 
@@ -228,6 +230,7 @@ cli
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
+        date: new Date(),
         isOverview: (sidebar[i].isOverview),
         current: {
           num: sidebar[i].num,

@@ -84,6 +84,7 @@
                 <img src="{{../image}}" />
               {{/if}}
               <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
+              <small><span class="ifont ifont-filled-calendar"></span> {{formatDate ../date}}</small>
             </div>
             {{/if}}
 
@@ -313,58 +314,48 @@
       }
     });
 
-    //
-    // TODO: CONFETTI ANIMATION WHEN LAST STEP IS COMPLETE
-    // <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.4.0/confetti.js">
-    //
-    // const button = document.querySelector(".my-button")
-    // button.addEventListener("click", () => confetti(button))
+    {{#unless isOverview}}
+      // Reading progress/scroll
+      const progressBarEl = document.querySelector(".progress-bar-container .progress");
+      const startScrollY = stepSections[0].getBoundingClientRect().top + window.scrollY - 100; // `window.scrollY` here is to compensate if page starts with scrollY > 0
 
-
-    //
-    // TODO / IDEA: automatically scroll to the last unfinished step.
-    //
-
-    // Reading progress/scroll
-    const progressBarEl = document.querySelector(".progress-bar-container .progress");
-    const startScrollY = stepSections[0].getBoundingClientRect().top + window.scrollY - 100; // `window.scrollY` here is to compensate if page starts with scrollY > 0
-
-    // Only calculate content height after DOM content is fully loaded.
-    let contentHeight = 0;
-    document.addEventListener("DOMContentLoaded", () => {
-      stepSections.forEach((stepSection, i) => {
-        // ignore last section
-        if (i === stepSections.length - 1) { return; }
-        contentHeight += stepSection.scrollHeight;
+      // Only calculate content height after DOM content is fully loaded.
+      let contentHeight = 0;
+      document.addEventListener("DOMContentLoaded", () => {
+        stepSections.forEach((stepSection, i) => {
+          // ignore last section
+          if (i === stepSections.length - 1) { return; }
+          contentHeight += stepSection.scrollHeight;
+        });
       });
-    });
-    contentHeight -= 300;
+      contentHeight -= 300;
 
-    const onResize = (event) => {
-      const mainBoundingRect = main.getBoundingClientRect();
-      const progressBarContainer = document.querySelector(".progress-bar-container");
-      progressBarContainer.style.left = `${mainBoundingRect.x}px`;
-      progressBarContainer.style.width = `${mainBoundingRect.width}px`;
-    };
-    window.addEventListener("resize", onResize);
-    onResize();
+      const onResize = (event) => {
+        const mainBoundingRect = main.getBoundingClientRect();
+        const progressBarContainer = document.querySelector(".progress-bar-container");
+        progressBarContainer.style.left = `${mainBoundingRect.x}px`;
+        progressBarContainer.style.width = `${mainBoundingRect.width}px`;
+      };
+      window.addEventListener("resize", onResize);
+      onResize();
 
-    window.addEventListener("scroll", function () {
-      const scrollY = window.scrollY;
-      if (scrollY >= startScrollY) {
-        document.body.classList.add("in-content");
+      window.addEventListener("scroll", function () {
+        const scrollY = window.scrollY;
+        if (scrollY >= startScrollY) {
+          document.body.classList.add("in-content");
 
-      } else {
-        document.body.classList.remove("in-content");
-      }
+        } else {
+          document.body.classList.remove("in-content");
+        }
 
-      // get current scroll position
-      const scrollPosition = Math.max(0, scrollY - startScrollY);
+        // get current scroll position
+        const scrollPosition = Math.max(0, scrollY - startScrollY);
 
-      // get scroll percentage and set width of progress bar
-      const scrollPercentage = (scrollPosition / contentHeight) * 100;
-      progressBarEl.style.width = scrollPercentage + "%";
-    });
+        // get scroll percentage and set width of progress bar
+        const scrollPercentage = (scrollPosition / contentHeight) * 100;
+        progressBarEl.style.width = scrollPercentage + "%";
+      });
+    {{/unless}}
 
   </script>
 

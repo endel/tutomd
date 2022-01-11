@@ -1,4 +1,4 @@
-![](search:something)
+![](search:tutorial)
 
 # Title of the whole tutorial
 

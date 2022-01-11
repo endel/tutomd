@@ -22,6 +22,5 @@ export async function getImage(keywords) {
     perPage: 1,
     orderBy: "relevant"
   })
-  console.log(request, "results:", request?.response?.results);
   return request?.response?.results?.[0].urls.regular || "";
 }
