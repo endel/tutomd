@@ -11,6 +11,8 @@ import markdownItFootnote from "markdown-it-footnote";
 import { createUnplashAPI, getImage } from "./unsplash";
 import { format } from "date-and-time";
 
+const packageJson = require('../package.json');
+
 const READING_WORDS_PER_MINUTE = 180;
 
 const md = markdownIt({
@@ -273,7 +275,7 @@ cli
   });
 
 cli.help();
-cli.version('1.0.0');
+cli.version(packageJson.version);
 
 (async function() {
   // Parse CLI args without running the command
