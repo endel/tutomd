@@ -7,6 +7,12 @@
   "bin": {
     "tutomd": "./bin/tutomd"
   },
+  "files": [
+    "lib",
+    "README.md",
+    "template",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "ts-node src/index.ts generate tutorial/* --unsplash-access-key 7rHOgNNtUFaI2bOY61EyZqooBRHcMToGQEwxaGlwSvY --out html",
