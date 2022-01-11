@@ -106,8 +106,8 @@ const cli = cac();
 cli
   .command('generate [...files]', 'Generate tutorial for file')
   .option("--out <dir>", "Output directory", { default: "output" })
-  .option("--date-format <format>", "Date format, e.g.: dd/mm/yyyy (More info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc)", { default: "MMMM D, YYYY" })
-  .option("--theme <name>", "Theme path", { default: "template/default.css" })
+  .option("--date-format <format>", "Date format [More info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
+  .option("--theme <css-file>", "Theme path", { default: "template/default.css" })
   .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images", { default: "" })
   .action(async (files, options) => {
     // configure handlebars
@@ -135,7 +135,7 @@ cli
       return [file.filename, file];
     }));
 
-    const source = fs.readFileSync(path.resolve("template", "index.hbs")).toString();
+    const source = fs.readFileSync(path.resolve(__dirname, "..", "template", "index.hbs")).toString();
     const template = Handlebars.compile(source);
 
     // iterate over each .md file to generate common sidebar data
@@ -264,7 +264,7 @@ cli
      * Copy the CSS theme over
      */
     const themeCSS = fs.readFileSync(options.theme).toString();
-    const iconsCSS = fs.readFileSync(path.resolve("template", "icons.css")).toString();
+    const iconsCSS = fs.readFileSync(path.resolve(__dirname, "..", "template", "icons.css")).toString();
     const additionalCSS = options.additionalCSS
       ? fs.readFileSync(options.additionalCSS).toString()
       : "";
