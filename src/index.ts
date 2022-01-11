@@ -238,7 +238,6 @@ cli
           // no need to get the title from the section, so we can replace with
           // the number of it into the rendered
           const titleToken = sectionTokens.find((token) => token.type === "heading_open");
-          console.log({ titleToken });
           const titleIndex = sectionTokens.indexOf(titleToken);
           const title = sectionTokens[titleIndex + 1].content;
           rendered = rendered.replace(title, `${j}. ${title}`)

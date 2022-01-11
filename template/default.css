@@ -77,13 +77,18 @@ aside a:hover { color: var(--link-color); }
 
 aside .section:not(:first-child) { margin-top: 2em; }
 aside .section:not(:last-child) { margin-bottom: 2em; }
-aside .section .num {
+
+/* fixes multiline sidebar links */
+aside .section ul li a { display: flex; }
+aside .section ul li a .num {
   display: inline-block;
   padding-right: 16px;
   text-align: right;
   width: 32px;
   margin-left: 1em;
 }
+aside .section ul li a .text { flex: 1; }
+
 aside .section .num::before { /* additional "list-style" bullet */
   content: "";
   position: absolute;
@@ -207,7 +212,7 @@ main {
 h1, h2 {
   font-size: 24px;
   font-weight: 700;
-
+  line-height: 32px;
 }
 h1 { margin-bottom: 24px; }
 h2 { margin-bottom: 0.5em; }
@@ -227,6 +232,17 @@ ul li {
   position: relative;
   margin-bottom: 12px;
 }
+
+/* ordered list */
+ol {
+  list-style: decimal;
+  margin: 1.5em 1.5em 1.5em 3em;
+}
+ol li {
+  position: relative;
+  margin-bottom: 12px;
+}
+ol li::marker { font-weight: bold; }
 
 section ul li::before {
   content: "";
@@ -366,6 +382,13 @@ section.step .completion {
   transition: background-color 0.2s;
 }
 section.step.complete .completion { background-color: #1fd348; }
+
+/* images */
+section.step img {
+  display: block;
+  margin: 0 auto;
+  border-radius: 0.5em;
+}
 
 .button {
   text-decoration: none;
