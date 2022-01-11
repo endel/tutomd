@@ -1,3 +1,5 @@
+![](search:introduction)
+
 # Introduction to Visual Scripting
 
 > TODO: Combina all tutorials from this folder into this **project**.

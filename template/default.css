@@ -467,6 +467,7 @@ body.is-overview-true main > ul .thumbnail {
   display: inherit;
   width: 40%;
   background-size: cover;
+  background-color:rgb(51, 51, 51);
 }
 body.is-overview-true main > ul .data {
   width: 60%;

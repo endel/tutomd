@@ -72,16 +72,33 @@ function forHumans(seconds) {
 }
 
 function getFirstImageToken (tokens)  {
-  const index = tokens.findIndex((token) => token.type === "inline" && token.children?.[0]?.tag === "img");
-
-  if (index !== -1) {
-    return tokens[index];
-
-  } else {
-    return false;
-  }
+  const imgTokenIndex = tokens.findIndex((token) => token.type === "inline" && token.children?.[0]?.tag === "img");
+  return (imgTokenIndex !== -1) ? tokens[imgTokenIndex] : false;
 }
 
+class File {
+  constructor(fullpath) {
+    const extname = path.extname(fullpath);
+    const filename = path.basename(fullpath, extname);
+
+    // only read contents of Markdown files.
+    if (extname === ".md") {
+      this.contents = fs.readFileSync(fullpath).toString();
+    }
+
+    const [num, ...segments] = filename.split('-');
+    this.num = parseInt(num);
+
+    if (num === 0 && segments[0] === "index") {
+      this.filename = segments[0];
+
+    } else {
+      this.filename = segments.join('-');
+    }
+
+    this.extname = extname;
+  }
+}
 
 const cli = cac();
 
@@ -91,33 +108,36 @@ cli
   .option("--theme <name>", "Theme path", { default: "template/default.css" })
   .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images", { default: "" })
   .action(async (files, options) => {
+    // create out directory
+    mkdirp.sync(options.out);
+
     const copiedFiles = [];
 
     // copy files (that aren't Markdown) over
     files.filter(file => !file.endsWith(".md")).forEach(src => {
-      copiedFiles.push(path.basename(src));
+      const file = new File(src);
+      copiedFiles.push(`${file.filename}${file.extname}`);
 
-      const destiny = path.resolve(options.out, path.basename(src));
+      const destiny = path.resolve(options.out, `${file.filename}${file.extname}`);
       fs.copyFileSync(src, destiny);
       console.log("Copying", `'${src}'`, "to", `'${destiny}'`);
     });
 
     // only consider markdown (.md) files
-    files = files.filter(file => file.endsWith(".md"));
+    files = new Map(files.filter(file => file.endsWith(".md")).map((filename) => {
+      const file = new File(filename);
+      return [file.filename, file];
+    }));
 
     const source = fs.readFileSync(path.resolve("template", "index.hbs")).toString();
     const template = Handlebars.compile(source);
-    const fileContents = {};
 
-    const sidebar = await Promise.all(files.map(async (file, i) => {
-      const filename = path.basename(file, ".md"); // FIXME: don't duplicate path.basename() here
-      fileContents[file] = fs.readFileSync(file).toString();
+    // iterate over each .md file to generate common sidebar data
+    const filenames = Array.from(files.keys());
+    const sidebar = await Promise.all(filenames.map(async (filename, i) => {
+      const file = files.get(filename);
 
-      let [num, ..._] = filename.split("-");
-      num = parseInt(num);
-
-      const contents = fileContents[file];
-      const rawSections = contents.split("---").map(content => content.trim());
+      const rawSections = file.contents.split("---").map(content => content.trim());
       let wordCount = 0;
 
       const tokensPerSection = rawSections.map((section, j) => {
@@ -154,8 +174,8 @@ cli
       }
 
       return {
-        isOverview: (num === 0),
-        num,
+        isOverview: (file.num === 0),
+        num: file.num,
         title,
         image,
         hasPreviewImage: (!!image),
@@ -167,8 +187,9 @@ cli
 
     const total = sidebar[sidebar.length - 1].num;
 
-    files.forEach((file, i) => {
-      const filename = path.basename(file, ".md");
+    // iterate over each .md file to generate its contents
+    filenames.forEach((filename, i) => {
+      const file = files.get(filename);
       const next = sidebar[i + 1];
 
       const currentSidebar = JSON.parse(JSON.stringify(sidebar));
@@ -203,7 +224,7 @@ cli
         return { rendered, id };
       });
 
-      const tokens = md.parse(fileContents[file]);
+      const tokens = md.parse(file.contents);
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
@@ -227,9 +248,6 @@ cli
       };
 
       const html = template(data);
-
-      // create out directory
-      mkdirp.sync(options.out);
 
       // write html file into the out directory.
       fs.writeFileSync(path.resolve(options.out, `${filename}.html`) , html);
