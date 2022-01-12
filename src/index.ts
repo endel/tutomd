@@ -116,13 +116,18 @@ class File {
 const cli = cac();
 
 cli
-  .command('generate [...files]', 'generate tutorial for file')
+  .command('[...files]', 'generate tutorial for file')
   .option("--out <dir>", "output directory", { default: "output" })
   .option("--created-at <timestamp>", "tutorial creation date (number of milliseconds since the unix epoch)", { default: new Date() })
   .option("--date-format <format>", "date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
   .option("--theme <css-file>", "theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
   .option("--unsplash-access-key <access-key>", "unplash.com api key for generating section thumbnail images")
   .action(async (files, options) => {
+    if (files.length === 0) {
+      console.error(colors.red("No files provided. Use --help or -h for help."));
+      return;
+    }
+
     // configure handlebars
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
     Handlebars.registerHelper('formatDate', (date) => date && format(date, options.dateFormat));

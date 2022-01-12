@@ -14,6 +14,10 @@
 
   <title>{{ title }}</title>
 
+  <meta property="og:title" content="{{ title }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="{{ image }}" />
+
   <script type="text/javascript">
     // modified version of dom-confetti.
     // (adds initialPosition to physics/config option)
@@ -118,7 +122,13 @@
 
       <section class="step final">
         <div class="centered-content">
-          <p><small>Finished {{current.num}} of {{current.total}}:</small></p>
+          <p><small>
+            {{#if current.num}}
+              Finished {{current.num}} of {{current.total}}:
+            {{else}}
+              Finished:
+            {{/if}}
+          </small></p>
           <h3>{{title}}</h3>
 
           {{!-- TODO: Use different wording here --}}

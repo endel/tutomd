@@ -28,7 +28,7 @@ npm install -g tutomd
 Generating the HTML output:
 
 ```
-tutomd generate tutorial/* --out html
+tutomd tutorial/* --out html
 Copying from tutorial/4-directory-structure.png to /Users/endel/Projects/endel.dev/tutomd/4-directory-structure.png
 Copying from tutorial/head.html to /Users/endel/Projects/endel.dev/tutomd/head.html
 Copying from tutorial/tutomd.png to /Users/endel/Projects/endel.dev/tutomd/tutomd.png

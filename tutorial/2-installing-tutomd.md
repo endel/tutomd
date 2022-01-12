@@ -50,7 +50,7 @@ Commands:
   generate [...files]  Generate tutorial for file
 
 For more info, run any command with the `--help` flag:
-  $ tutomd generate --help
+  $ tutomd --help
 
 Options:
   -h, --help     Display this message

@@ -69,7 +69,7 @@ Contents of the second step
 Now, we're going to use the `tutomd` from the command-line in order to convert our `.md` files into `.html`.
 
 ```
-tutomd generate ./path/to/markdown/* --out html
+tutomd ./path/to/markdown/* --out html
 ```
 
 You should see an output that looks like this:

@@ -26,6 +26,11 @@ body {
   box-sizing: border-box;
 }
 
+iframe {
+  border: 0;
+  width: 100%;
+}
+
 a { color: var(--link-color) }
 small { color: var(--secondary-color); }
 table {
@@ -263,8 +268,8 @@ section ul li::before {
 
 /* quotes */
 .summary blockquote {
-  background: #fff;
-  color:rgb(51, 51, 51);
+  background: rgb(51, 51, 51);
+  border-left-color: rgb(127, 127, 127);
 }
 
 hr {
@@ -278,8 +283,8 @@ hr {
 
 blockquote {
   background: rgb(235, 235, 235);
-  margin: 2em;
-  padding: 1em;
+  margin: 1.5em 0;
+  padding: 1.2em 2em;
   border-left: 4px solid rgb(146, 206, 255);
 }
 
