@@ -143,6 +143,12 @@ cli
       fs.copyFileSync(src, destiny);
     });
 
+    // read custom <head> template
+    const customHeadFile = files.find((file) => file.indexOf("head.html") >= 0);
+    const head = (customHeadFile)
+      ? fs.readFileSync(customHeadFile).toString()
+      : "";
+
     // only consider markdown (.md) files
     files = new Map(files.filter(file => file.endsWith(".md")).map((filename) => {
       const file = new File(filename);
@@ -243,6 +249,7 @@ cli
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
+        head,
         date: options.createdAt,
         isOverview: (sidebar[i].isOverview),
         current: {

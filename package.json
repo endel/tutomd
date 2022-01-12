@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "ts-node src/index.ts generate tutorial/* --unsplash-access-key 7rHOgNNtUFaI2bOY61EyZqooBRHcMToGQEwxaGlwSvY --out html",
+    "generate-docs": "ts-node src/index.ts generate tutorial/* --unsplash-access-key $UNSPLASH_ACCESS_KEY --out ../endel.dev/tutomd",
     "prepublishOnly": "npm run build"
   },
   "author": "Endel Dreyer",

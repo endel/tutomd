@@ -28,6 +28,7 @@
     function confetti(root, config = {}) { const { elementCount, colors, width, height, perspective, angle, spread, startVelocity, decay, dragFriction, duration, stagger, random, initialPosition, } = Object.assign({}, defaults, backwardPatch(config)); root.style.perspective = perspective; const elements = createElements(root, elementCount, colors, width, height); const fettis = elements.map(element => ({ element, physics: randomPhysics(initialPosition, angle, spread, startVelocity, random) })); return animate(root, fettis, dragFriction, decay, duration, stagger); }
   </script>
 
+  {{{ head }}}
 </head>
 <body class="line-numbers has-preview-{{hasPreviewImage}} is-overview-{{isOverview}}">{{!-- Syntax highlight with line numbers --}}
 
