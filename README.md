@@ -2,7 +2,7 @@
 <img src="https://github.com/endel/tutomd/blob/master/logo.png?raw=1" width="70%" alt="tutomd" />
 </div>
 
-# `tutomd`: Markdown-based structured tutorial generator.
+# Markdown-based structured tutorial generator.
 
 > The output of this tool is highly inspired by Unity Learn tutorials (see [an example](https://learn.unity.com/project/introduction-to-visual-scripting?uv=2021.1))
 
