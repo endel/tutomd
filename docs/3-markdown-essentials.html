@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <link rel="stylesheet" href="theme.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.css">
+
+  <title>Markdown Essentials</title>
+
+  <script type="text/javascript">
+    // modified version of dom-confetti.
+    // (adds initialPosition to physics/config option)
+    const defaultColors = ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"];
+    function createElements(root, elementCount, colors, width, height) { return Array.from({ length: elementCount }).map((_, index) => { const element = document.createElement("div"); const color = colors[index % colors.length]; element.style["background-color"] = color; element.style.width = width; element.style.height = height; element.style.position = "absolute"; element.style.willChange = "transform, opacity"; element.style.visibility = "hidden"; root.appendChild(element); return element; }); }
+    function randomPhysics(initialPosition, angle, spread, startVelocity, random) { const radAngle = angle * (Math.PI / 180); const radSpread = spread * (Math.PI / 180); return { x: initialPosition.x, y: initialPosition.y, z: initialPosition.z, wobble: random() * 10, wobbleSpeed: 0.1 + random() * 0.1, velocity: startVelocity * 0.5 + random() * startVelocity, angle2D: -radAngle + (0.5 * radSpread - random() * radSpread), angle3D: -(Math.PI / 4) + random() * (Math.PI / 2), tiltAngle: random() * Math.PI, tiltAngleSpeed: 0.1 + random() * 0.3 }; }
+    function updateFetti(fetti, progress, dragFriction, decay) { fetti.physics.x += Math.cos(fetti.physics.angle2D) * fetti.physics.velocity; fetti.physics.y += Math.sin(fetti.physics.angle2D) * fetti.physics.velocity; fetti.physics.z += Math.sin(fetti.physics.angle3D) * fetti.physics.velocity; fetti.physics.wobble += fetti.physics.wobbleSpeed; if (decay) { fetti.physics.velocity *= decay; } else { fetti.physics.velocity -= fetti.physics.velocity * dragFriction; } fetti.physics.y += 3; fetti.physics.tiltAngle += fetti.physics.tiltAngleSpeed; const { x, y, z, tiltAngle, wobble } = fetti.physics; const wobbleX = x + 10 * Math.cos(wobble); const wobbleY = y + 10 * Math.sin(wobble); const transform = `translate3d(${wobbleX}px, ${wobbleY}px, ${z}px) rotate3d(1, 1, 1, ${tiltAngle}rad)`; fetti.element.style.visibility = "visible"; fetti.element.style.transform = transform; fetti.element.style.opacity = 1 - progress; }
+    function animate(root, fettis, dragFriction, decay, duration, stagger) { let startTime; return new Promise(resolve => { function update(time) { if (!startTime) startTime = time; const elapsed = time - startTime; const progress = startTime === time ? 0 : (time - startTime) / duration; fettis.slice(0, Math.ceil(elapsed / stagger)).forEach(fetti => { updateFetti(fetti, progress, dragFriction, decay); }); if (time - startTime < duration) { requestAnimationFrame(update); } else { fettis.forEach(fetti => { if (fetti.element.parentNode === root) { return root.removeChild(fetti.element); } }); resolve(); } } requestAnimationFrame(update); }); }
+
+    const defaults = { angle: 90, spread: 45, startVelocity: 45, elementCount: 50, width: "10px", height: "10px", perspective: "", colors: defaultColors, duration: 3000, stagger: 0, dragFriction: 0.1, random: Math.random, initialPosition: { x: 0, y: 0, z: 0 }, };
+    function backwardPatch(config) { if (!config.stagger && config.delay) { config.stagger = config.delay; } return config; }
+    function confetti(root, config = {}) { const { elementCount, colors, width, height, perspective, angle, spread, startVelocity, decay, dragFriction, duration, stagger, random, initialPosition, } = Object.assign({}, defaults, backwardPatch(config)); root.style.perspective = perspective; const elements = createElements(root, elementCount, colors, width, height); const fettis = elements.map(element => ({ element, physics: randomPhysics(initialPosition, angle, spread, startVelocity, random) })); return animate(root, fettis, dragFriction, decay, duration, stagger); }
+  </script>
+
+</head>
+<body class="line-numbers has-preview-true is-overview-false">
+
+  <aside>
+      <div class="section is-overview-true">
+        <div class="info">
+          <div class="thumbnail"  style="background-image: url(https://images.unsplash.com/photo-1586282023338-52aa50a846ba?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHx0dXRvcmlhbHxlbnwwfHx8fDE2NDE5MDk4NDU&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080); background-color: transparent;" >
+            <div class="ifont ifont-lrn_icon_finish"></div>
+          </div>
+          <div class="data">
+            <small>
+               Project 
+            </small>
+            <a href="index.html">Making your own structured tutorial with &#x60;tutomd&#x60;</a>
+          </div>
+        </div>
+      </div>
+      <div class="section is-overview-false">
+        <div class="info">
+          <div class="thumbnail"  style="background-image: url(https://images.unsplash.com/photo-1586282023338-52aa50a846ba?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHx0dXRvcmlhbHxlbnwwfHx8fDE2NDE5MDk4NDU&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080); background-color: transparent;" >
+            <div class="ifont ifont-lrn_icon_finish"></div>
+          </div>
+          <div class="data">
+            <small>
+               Tutorial 
+            </small>
+            <a href="1-what-to-expect.html">What is &#x60;tutomd&#x60; and what to expect from it?</a>
+          </div>
+        </div>
+            <ul>
+            </ul>
+      </div>
+      <div class="section is-overview-false">
+        <div class="info">
+          <div class="thumbnail"  style="background-image: url(https://images.unsplash.com/photo-1619410283995-43d9134e7656?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHxub2RlanN8ZW58MHx8fHwxNjQxOTA5ODQ1&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080); background-color: transparent;" >
+            <div class="ifont ifont-lrn_icon_finish"></div>
+          </div>
+          <div class="data">
+            <small>
+               Tutorial 
+            </small>
+            <a href="2-installing-tutomd.html">Installing &#x60;tutomd&#x60;</a>
+          </div>
+        </div>
+            <ul>
+            </ul>
+      </div>
+      <div class="section current is-overview-false">
+        <div class="info">
+          <div class="thumbnail"  style="background-image: url(https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHxodG1sfGVufDB8fHx8MTY0MTk5MzgxNQ&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080); background-color: transparent;" >
+            <div class="ifont ifont-lrn_icon_finish"></div>
+          </div>
+          <div class="data">
+            <small>
+               Tutorial 
+            </small>
+            <a href="3-markdown-essentials.html">Markdown Essentials</a>
+          </div>
+        </div>
+            <ul>
+                <li><a href="#markdown%3A-the-basics"><span class="num">1</span><span class="text">Markdown: the basics</span></a></li>
+                <li><a href="#html-is-supported-on-markdown"><span class="num">2</span><span class="text">HTML is supported on Markdown</span></a></li>
+                <li><a href="#learn-more"><span class="num">3</span><span class="text">Learn more</span></a></li>
+            </ul>
+      </div>
+      <div class="section is-overview-false">
+        <div class="info">
+          <div class="thumbnail"  style="background-image: url(https://images.unsplash.com/photo-1493476523860-a6de6ce1b0c3?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHxzdHJ1Y3R1cmV8ZW58MHx8fHwxNjQxOTI0MzM2&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080); background-color: transparent;" >
+            <div class="ifont ifont-lrn_icon_finish"></div>
+          </div>
+          <div class="data">
+            <small>
+               Tutorial 
+            </small>
+            <a href="4-structure-guide-and-formatting-rules.html">Structure Guide and Formatting Rules</a>
+          </div>
+        </div>
+            <ul>
+            </ul>
+      </div>
+  </aside>
+
+  <main id="summary">
+    <div class="progress-bar-container">
+      <div class="progress"></div>
+    </div>
+
+    <header style="background-image: url(https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHxodG1sfGVufDB8fHx8MTY0MTk5MzgxNQ&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080)">
+      <div class="backdrop">
+      </div>
+    </header>
+
+
+        <section class=" summary ">
+          <div class="centered-content">
+            <div class="summary-header">
+                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwyOTAwNTh8MHwxfHNlYXJjaHwxfHxodG1sfGVufDB8fHx8MTY0MTk5MzgxNQ&amp;ixlib&#x3D;rb-1.2.1&amp;q&#x3D;80&amp;w&#x3D;1080" />
+              <small><span class="ifont ifont-filled-calendar"></span> January 12, 2022</small>
+              <small><span class="ifont ifont-filled-time"></span> 1 minute</small>
+            </div>
+
+            <h1 id="markdown-essentials" tabindex="-1">Markdown Essentials</h1>
+<p>The <code>tutomd</code> tool processes Markdown and transforms it to HTML.</p>
+<p>If you already know Markdown, you can skip this section.</p>
+
+
+          </div>
+        </section>
+
+
+        <section class=" step ">
+          <div class="centered-content">
+
+            <h1 id="markdown%3A-the-basics" tabindex="-1">1. Markdown: the basics</h1>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Markdown Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<p>Heading</p>
+</td>
+<td>
+<pre><code># H1
+## H2
+### H3
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Bold</p>
+</td>
+<td>
+<pre><code>**bold text**
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Italic</p>
+</td>
+<td>
+<pre><code>*italic text*
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Blockquote</p>
+</td>
+<td>
+<pre><code>&gt; blockquote
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Ordered list</p>
+</td>
+<td>
+<pre><code>1. First item
+2. Second item
+3. Third item
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Unordered list</p>
+</td>
+<td>
+<pre><code>- First item
+- Second item
+- Third item
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Code</p>
+</td>
+<td>
+<pre><code>```
+Code
+```
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Horizontal rule</p>
+</td>
+<td>
+<pre><code>---
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Link</p>
+</td>
+<td>
+<pre><code>[title](https://www.example.com)
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<p>Image</p>
+</td>
+<td>
+<pre><code>![alt text](image.jpg)
+</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://www.markdownguide.org/cheat-sheet/">Read more about the Markdown syntax.</a></p>
+
+
+            <input type="checkbox" id="complete-markdown%3A-the-basics" name="markdown%3A-the-basics" />
+            <div>
+              <label class="button" for="complete-markdown%3A-the-basics">
+                <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+                <span class="checked">Mark step as incomplete</span>
+              </label>
+
+              <div class="completion ifont ifont-lrn_icon_finish"></div>
+            </div>
+          </div>
+        </section>
+
+            <div class="step-separator"></div>
+
+        <section class=" step ">
+          <div class="centered-content">
+
+            <h1 id="html-is-supported-on-markdown" tabindex="-1">2. HTML is supported on Markdown</h1>
+<p>HTML is supported inside Markdown. You may add any HTML tag you’d like, such as YouTube iframes:</p>
+<pre><code class="language-html">&lt;iframe width=&quot;100%&quot; height=&quot;315&quot; src=&quot;https://www.youtube.com/embed/moduMHp7TKQ&quot; title=&quot;YouTube video player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen&gt;&lt;/iframe&gt;
+</code></pre>
+<p><strong>Result:</strong></p>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/moduMHp7TKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+            <input type="checkbox" id="complete-html-is-supported-on-markdown" name="html-is-supported-on-markdown" />
+            <div>
+              <label class="button" for="complete-html-is-supported-on-markdown">
+                <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+                <span class="checked">Mark step as incomplete</span>
+              </label>
+
+              <div class="completion ifont ifont-lrn_icon_finish"></div>
+            </div>
+          </div>
+        </section>
+
+            <div class="step-separator"></div>
+
+        <section class=" step ">
+          <div class="centered-content">
+
+            <h1 id="learn-more" tabindex="-1">3. Learn more</h1>
+<p>Check out this page for full documentation on Markdown: <a href="https://www.markdownguide.org/">https://www.markdownguide.org/</a></p>
+
+
+            <input type="checkbox" id="complete-learn-more" name="learn-more" />
+            <div>
+              <label class="button" for="complete-learn-more">
+                <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+                <span class="checked">Mark step as incomplete</span>
+              </label>
+
+              <div class="completion ifont ifont-lrn_icon_finish"></div>
+            </div>
+          </div>
+        </section>
+
+
+
+      <div class="step-separator"></div>
+
+      <section class="step final">
+        <div class="centered-content">
+          <p><small>Finished 3 of 4:</small></p>
+          <h3>Markdown Essentials</h3>
+
+            <p><small>Next:</small></p>
+            <h3>4. Structure Guide and Formatting Rules</h3>
+
+            <a href="4-structure-guide-and-formatting-rules.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
+            <p><a href="4-structure-guide-and-formatting-rules.html" class="button incomplete">Continue without marking complete</a></p>
+        </div>
+      </section>
+
+
+  </main>
+
+  <a href="#summary" class="back-to-top">
+    <div class="ifont ifont-icons-jump-to-top"></div>
+  </a>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.js"></script>
+
+  <script type="text/javascript">
+    //
+    // Scroll to top
+    //
+    const backToTopEl = document.querySelector(".back-to-top");
+    backToTopEl.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    });
+
+    //
+    // Step completion: Scroll animation for next step
+    //
+    const main = document.querySelector('main');
+    const stepSections = document.querySelectorAll('.step');
+    const sidebarItems = document.querySelectorAll('aside ul li');
+    const sidebarSections = document.querySelectorAll('aside .section');
+    const completionCheckboxes = document.querySelectorAll('.step input[type="checkbox"]');
+    const currentSidebarSection = Array.from(sidebarSections).findIndex((section) => section.classList.contains("current"));
+
+    //
+    // check for previously completed sections on the sidebar
+    //
+    const sidebar = [];
+        sidebar.push("1-what-to-expect");
+        if (JSON.parse(localStorage.getItem("1-what-to-expect") || "{}").completed) {
+          sidebarSections[1].classList.add("complete");
+        }
+        sidebar.push("2-installing-tutomd");
+        if (JSON.parse(localStorage.getItem("2-installing-tutomd") || "{}").completed) {
+          sidebarSections[2].classList.add("complete");
+        }
+        sidebar.push("3-markdown-essentials");
+        if (JSON.parse(localStorage.getItem("3-markdown-essentials") || "{}").completed) {
+          sidebarSections[3].classList.add("complete");
+        }
+        sidebar.push("4-structure-guide-and-formatting-rules");
+        if (JSON.parse(localStorage.getItem("4-structure-guide-and-formatting-rules") || "{}").completed) {
+          sidebarSections[4].classList.add("complete");
+        }
+
+    let allowScroll = true; // FIXME: this is too ugly...
+
+    const completionCacheKey = "3-markdown-essentials";
+    let cachedCompletionStatus = JSON.parse(localStorage.getItem(completionCacheKey) || "{}");
+
+    const isAllLocalStepsComplete = () => Array.from(sidebarItems).every((_, i) => cachedCompletionStatus[i]);
+    const isAllComplete = () => sidebar.every((filename) => JSON.parse(localStorage.getItem(filename) || "{}").completed);
+
+    const cacheCompletion = () => {
+      const previousCompletionStatus = cachedCompletionStatus.completed;
+      cachedCompletionStatus.completed = isAllLocalStepsComplete();
+      if (previousCompletionStatus !== cachedCompletionStatus.completed) {
+        if (cachedCompletionStatus.completed) {
+          sidebarSections[currentSidebarSection].classList.add("complete");
+        } else {
+          sidebarSections[currentSidebarSection].classList.remove("complete");
+        }
+      }
+      localStorage.setItem(completionCacheKey, JSON.stringify(cachedCompletionStatus));
+    };
+
+    completionCheckboxes.forEach((checkbox, i) => {
+      // Flag sidebar as checked
+      checkbox.addEventListener("change", (event) => {
+        if (checkbox.checked) {
+          sidebarItems[i].classList.add("completed");
+
+        } else {
+          sidebarItems[i].classList.remove("completed");
+        }
+      });
+
+      // Initial checked state from cached value
+      if (cachedCompletionStatus[i]) {
+        checkbox.checked = true;
+        checkbox.dispatchEvent(new Event("change"));
+      }
+
+      checkbox.addEventListener("change", (event) => {
+        const checked = checkbox.checked;
+
+        cachedCompletionStatus[i] = checked;
+        cacheCompletion();
+
+        // if all are complete, trigger confetti animation
+        if (isAllComplete()) {
+          const button = stepSections[i].querySelector(".button");
+          confetti(button, {
+            initialPosition: {
+              x: button.offsetWidth / 2,
+              y: 0,
+              z: 0,
+            }
+          });
+          return;
+        }
+
+        // query for a next step/section that is not yet complete
+        const nextSection = Array
+          .from(stepSections)
+          .find((section, j) => {
+            return (
+              (j > i) &&
+              !stepSections[j].querySelector('input[type="checkbox"]:checked')
+            );
+          });
+        if (allowScroll && checked && nextSection) {
+          window.scrollTo({
+            top: nextSection.offsetTop - 50,
+            left: 0,
+            behavior: 'smooth'
+          });
+        }
+      });
+
+      //
+      // Mark all as complete & continue
+      //
+      const markAllCompleteButton = document.querySelector('.step.final .button');
+      if (markAllCompleteButton) {
+        markAllCompleteButton.addEventListener("click", (event) => {
+          allowScroll = false;
+          completionCheckboxes.forEach((checkbox) => {
+            if (!checkbox.checked) {
+              checkbox.checked = true;
+              checkbox.dispatchEvent(new Event("change"));
+            }
+          });
+        });
+      }
+    });
+
+      // Reading progress/scroll
+      const progressBarEl = document.querySelector(".progress-bar-container .progress");
+      const startScrollY = stepSections[0].getBoundingClientRect().top + window.scrollY - 100; // `window.scrollY` here is to compensate if page starts with scrollY > 0
+
+      // Only calculate content height after DOM content is fully loaded.
+      let contentHeight = 0;
+      document.addEventListener("DOMContentLoaded", () => {
+        stepSections.forEach((stepSection, i) => {
+          // ignore last section
+          if (i === stepSections.length - 1) { return; }
+          contentHeight += stepSection.scrollHeight;
+        });
+      });
+      contentHeight -= 300;
+
+      const onResize = (event) => {
+        const mainBoundingRect = main.getBoundingClientRect();
+        const progressBarContainer = document.querySelector(".progress-bar-container");
+        progressBarContainer.style.left = `${mainBoundingRect.x}px`;
+        progressBarContainer.style.width = `${mainBoundingRect.width}px`;
+      };
+      window.addEventListener("resize", onResize);
+      onResize();
+
+      window.addEventListener("scroll", function () {
+        const scrollY = window.scrollY;
+        if (scrollY >= startScrollY) {
+          document.body.classList.add("in-content");
+
+        } else {
+          document.body.classList.remove("in-content");
+        }
+
+        // get current scroll position
+        const scrollPosition = Math.max(0, scrollY - startScrollY);
+
+        // get scroll percentage and set width of progress bar
+        const scrollPercentage = (scrollPosition / contentHeight) * 100;
+        progressBarEl.style.width = scrollPercentage + "%";
+      });
+
+  </script>
+
+</body>
+</html>
