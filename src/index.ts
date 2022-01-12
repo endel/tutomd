@@ -119,7 +119,7 @@ cli
   .command('generate [...files]', 'generate tutorial for file')
   .option("--out <dir>", "output directory", { default: "output" })
   .option("--created-at <timestamp>", "tutorial creation date (number of milliseconds since the unix epoch)", { default: new Date() })
-  .option("--date-format <format>", "date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "mmmm d, yyyy" })
+  .option("--date-format <format>", "date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
   .option("--theme <css-file>", "theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
   .option("--unsplash-access-key <access-key>", "unplash.com api key for generating section thumbnail images")
   .action(async (files, options) => {
