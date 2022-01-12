@@ -9,8 +9,7 @@ export function createUnplashAPI(accessKey) {
   }
 
   unsplash = createApi({
-    // TODO: remove my access key
-    accessKey: accessKey || "7rHOgNNtUFaI2bOY61EyZqooBRHcMToGQEwxaGlwSvY",
+    accessKey: accessKey,
 
     // @ts-ignore
     fetch: nodeFetch,
