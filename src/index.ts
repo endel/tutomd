@@ -12,7 +12,6 @@ import markdownItMultimdTable from "markdown-it-multimd-table";
 import { createUnplashAPI, getImage } from "./unsplash";
 import { format } from "date-and-time";
 import colors from "colors";
-import ghpages from "gh-pages";
 
 const packageJson = require('../package.json');
 
@@ -280,26 +279,6 @@ cli
       : "";
 
     writeFile(path.resolve(options.out, "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
-  });
-
-cli
-  .command('publish <directory>', 'publish directory into gh-pages branch')
-  .action(async (directory, options) => {
-    if (!fs.existsSync(directory)) {
-      console.error(colors.red(`${directory} does not exist. Please provide a valid directory.`));
-      return;
-    }
-
-    console.log(`Publishing ${colors.yellow(directory)} into 'gh-pages' branch.`);
-
-    ghpages.publish(directory, (err) => {
-      if (err) {
-        console.error(colors.red(err));
-
-      } else {
-        console.log(colors.green(`Published at ${directory}`));
-      }
-    });
   });
 
 cli.help();

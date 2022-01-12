@@ -1,6 +1,6 @@
 {
   "name": "tutomd",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Structured tutorial generator",
   "main": "index.js",
   "type": "commonjs",
@@ -25,7 +25,6 @@
     "colors": "^1.4.0",
     "date-and-time": "^2.1.0",
     "dateformat": "^5.0.2",
-    "gh-pages": "^3.2.3",
     "handlebars": "^4.7.7",
     "markdown-it": "^12.3.0",
     "markdown-it-anchor": "^8.4.1",
