@@ -16,6 +16,9 @@
 - Sidebar w/ all tutorial steps
 - Visual progress for the reader
 
+> There are still some missing features, such as mobile support. Feel free to
+> check this tool out and suggest improvements.
+
 ## Hey, I made this on stream!
 
 Follow me on Twitch 😋 [https://www.twitch.tv/endeld](https://www.twitch.tv/endeld)
