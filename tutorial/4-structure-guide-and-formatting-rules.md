@@ -1,71 +1,10 @@
 ![](search:structure)
 
-# Structure Guide and Markdown Essentials
+# Structure Guide and Formatting Rules
 
-The `tutomd` tool processes Markdown and transforms it to HTML.
+In order to generate a good-looking output, there are some rules to follow.
 
-Here you will learn:
-
-- Essential Markdown tags
-- Recommended text and file structure for best output
-
-# Markdown Essentials
-
-| Element | Markdown Syntax |
-|--|--|
-| Heading | ```         \
-|         | # H1        \
-|         | ## H2       \
-|         | ### H3      \
-|         | ```         |
-| Bold    | ```         \
-|         | **bold text**  \
-|         | ```         |
-| Italic    | ```         \
-|         | *italic text*  \
-|         | ```         |
-| Blockquote    | ```         \
-|         | > blockquote  \
-|         | ```         |
-| Ordered list    | ```         \
-|         | 1. First item \
-|         | 2. Second item \
-|         | 3. Third item \
-|         | ```         |
-| Unordered list    | ```         \
-|         | - First item \
-|         | - Second item \
-|         | - Third item \
-|         | ```         |
-| Code    | ````         \
-|         | ``` \
-|         | Code \
-|         | ``` \
-|         | ````         |
-| Horizontal rule    | ```         \
-|         | --- \
-|         | ```         |
-| Link | ```         \
-|         | [title](https://www.example.com) \
-|         | ```         |
-| Image | ```         \
-|         | ![alt text](image.jpg) \
-|         | ```         |
-
-[Read more about the Markdown syntax.](https://www.markdownguide.org/cheat-sheet/)
-
-
-## Using HTML
-
-HTML is supported inside Markdown. You may add any HTML tag you'd like, such as YouTube iframes:
-
-```html
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/moduMHp7TKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-```
-
-**Result:**
-
-<iframe width="100%" height="315" src="https://www.youtube.com/embed/moduMHp7TKQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+Here you will learn the recommendations for your text and file structure.
 
 # Sidebar Rules
 
@@ -75,9 +14,11 @@ It is important to follow these rules when defining your tutorial:
 - The order of the articles are defined by their file names
 - Each `.md` file is turned into a `.html` file.
 
-![Directory Structure](3-directory-structure.png)
+![Directory Structure](4-directory-structure.png)
 
-## The article header image
+# Article Rules
+
+## Header image
 
 An image is optional for each article. You may define it in 3 different ways:
 
@@ -85,7 +26,7 @@ An image is optional for each article. You may define it in 3 different ways:
 - **By markdown image tag**: You may use the markdown image tag to provide a custom image: `![](custom-image.png)`
 - **By using a special "search" tag on image**: You may automatically search for a unsplash.com image. See next section!
 
-## Using unsplash.com to automatically search for a header image
+### Using unsplash.com to automatically search for a header image
 
 You will need an account on unsplash.com, and a developer "Access Key" in order to use this feature.
 
@@ -95,7 +36,7 @@ You will need an account on unsplash.com, and a developer "Access Key" in order 
 
 Voila!
 
-# Formatting the article
+# Article summary and steps
 
 As you've seen on [What to expect](1-what-to-expect.html), an article has a summary, and an unlimited amount of step sections.
 

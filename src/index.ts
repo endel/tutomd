@@ -12,6 +12,7 @@ import markdownItMultimdTable from "markdown-it-multimd-table";
 import { createUnplashAPI, getImage } from "./unsplash";
 import { format } from "date-and-time";
 import colors from "colors";
+import ghpages from "gh-pages";
 
 const packageJson = require('../package.json');
 
@@ -116,12 +117,12 @@ class File {
 const cli = cac();
 
 cli
-  .command('generate [...files]', 'Generate tutorial for file')
-  .option("--out <dir>", "Output directory", { default: "output" })
-  .option("--created-at <timestamp>", "Tutorial creation date (Number of milliseconds since the Unix Epoch)", { default: new Date() })
-  .option("--date-format <format>", "Date format [More info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
-  .option("--theme <css-file>", "Theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
-  .option("--unsplash-access-key <access-key>", "Unplash.com API key for generating section thumbnail images")
+  .command('generate [...files]', 'generate tutorial for file')
+  .option("--out <dir>", "output directory", { default: "output" })
+  .option("--created-at <timestamp>", "tutorial creation date (number of milliseconds since the unix epoch)", { default: new date() })
+  .option("--date-format <format>", "date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "mmmm d, yyyy" })
+  .option("--theme <css-file>", "theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
+  .option("--unsplash-access-key <access-key>", "unplash.com api key for generating section thumbnail images")
   .action(async (files, options) => {
     // configure handlebars
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
@@ -279,6 +280,26 @@ cli
       : "";
 
     writeFile(path.resolve(options.out, "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
+  });
+
+cli
+  .command('publish <directory>', 'publish directory into gh-pages branch')
+  .action(async (directory, options) => {
+    if (!fs.existsSync(directory)) {
+      console.error(colors.red(`${directory} does not exist. Please provide a valid directory.`));
+      return;
+    }
+
+    console.log(`Publishing ${colors.yellow(directory)} into 'gh-pages' branch.`);
+
+    ghpages.publish(directory, (err) => {
+      if (err) {
+        console.error(colors.red(err));
+
+      } else {
+        console.log(colors.green(`Published at ${directory}`));
+      }
+    });
   });
 
 cli.help();
