@@ -1,6 +1,6 @@
 {
   "name": "tutomd",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Structured tutorial generator",
   "main": "index.js",
   "type": "commonjs",
@@ -31,11 +31,14 @@
     "markdown-it-footnote": "^3.0.3",
     "markdown-it-ins": "^3.0.1",
     "markdown-it-mark": "^3.0.1",
+    "markdown-it-metadata-block": "^1.0.2",
     "markdown-it-multimd-table": "^4.1.1",
     "mkdirp": "^1.0.4",
     "node-fetch": "^2.6.6",
+    "parse-git-config": "^3.0.0",
     "prismjs": "^1.25.0",
-    "unsplash-js": "^7.0.15"
+    "unsplash-js": "^7.0.15",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@types/colors": "^1.2.1",

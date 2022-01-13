@@ -166,7 +166,7 @@ aside .section.is-overview-true {
 /* complete section! */
 aside .section.complete .info .thumbnail { border: 3px solid var(--complete-color) !important; }
 aside .section.complete .info { color: var(--complete-color); }
-aside .section:not(.complete) .info .ifont { display: none; font-size: 18px; }
+aside .section:not(.complete) .info .icon { display: none; font-size: 18px; }
 
 /* current section! */
 body.is-overview-true aside .section.is-overview-true .info .thumbnail,/* on overview page */
@@ -179,7 +179,7 @@ aside .section .info .data {
   margin: auto 0;
 }
 aside .section .info .data small { display: block; }
-aside .section .info .ifont { display: inline-block; }
+aside .section .info .icon { display: inline-block; }
 
 .back-to-top {
   position: fixed;
@@ -224,6 +224,9 @@ h1 { margin-bottom: 24px; }
 h2 { margin-bottom: 0.5em; }
 h1:not(:first-child) { margin-top: 1em; }
 h2:not(:first-child) { margin-top: 2em; }
+
+/* improve me? */
+h1 strong, h2 strong, h3 strong { color: #000; }
 
 /* paragraph */
 p { margin-bottom: 24px; }
@@ -309,7 +312,18 @@ header img {
   width: 10vw;
 }
 
+section {
+  position: relative;
+  padding: 1.5em;
+}
+section p .icon {
+  position: relative;
+  top: 2px;
+  font-size: 1.3em;
+}
+
 /* summary / header */
+
 section.summary {
   background: #1a1a1a;
   color: var(--secondary-color);
@@ -326,9 +340,14 @@ section.summary h1 {
   line-height: 52px;
 }
 section.summary h1,
-section.summary h2 {
+section.summary h2,
+section.summary h3 {
   color: #fff;
+  font-weight: 500;
 }
+
+section.summary a { text-decoration: none; }
+section.summary a:hover { color: #6ec6ff; }
 
 section.summary .summary-header { margin-top: -100px; }
 section.summary .summary-header img {
@@ -342,18 +361,13 @@ section.summary .summary-header small {
   top: -12px;
   margin-right: 0.5em;
 }
-section.summary .summary-header small .ifont {
+section.summary .summary-header small .icon {
   position: relative;
   top: 6px;
 }
 
 section.summary ul li::before {
   background-color: #fff;
-}
-
-section {
-  position: relative;
-  padding: 1.5em;
 }
 
 /* first step box */
@@ -422,7 +436,7 @@ section.step img {
 }
 .button:hover { background-color: #6ec6ff; }
 .button:active { background-color: #0069c0; }
-.button .ifont {
+.button .icon {
   display: inline-block;
   margin-left: 0.2em;
 }
@@ -546,7 +560,7 @@ body.is-overview-true main > ul .data p {
   color: var(--secondary-color);
 }
 body.is-overview-true main > ul small:not(:last-child) { margin-right: 0.3em; }
-body.is-overview-true main > ul .ifont {
+body.is-overview-true main > ul .icon {
   position: relative;
   top: 4px;
 }

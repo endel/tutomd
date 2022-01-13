@@ -1,4 +1,5 @@
 import fs from "fs";
+import os from "os";
 import path from "path";
 import cac from "cac";
 import markdownIt from "markdown-it";
@@ -8,17 +9,25 @@ import markdownItAnchor from "markdown-it-anchor";
 import markdownItIns from "markdown-it-anchor";
 import markdownItMark from "markdown-it-mark";
 import markdownItMultimdTable from "markdown-it-multimd-table";
+import markdownItMetadataBlock from "./markdown-it/metadata-block";
 // import markdownItFootnote from "markdown-it-footnote";
+import yaml from "yaml";
 import { createUnplashAPI, getImage } from "./unsplash";
 import { format } from "date-and-time";
 import colors from "colors";
-
-const packageJson = require('../package.json');
+import parseGitConfig from "parse-git-config";
 
 const READING_WORDS_PER_MINUTE = 180;
 
+const packageJson = require('../package.json');
+const gitconfig = parseGitConfig.sync({ path: path.resolve(os.homedir(), ".gitconfig") });
+const metadata: any = {
+  author: gitconfig?.user?.name
+};
+
 const md = markdownIt({
   html: true,
+  breaks: true,
   linkify: true,
   typographer: true,
   // highlight:
@@ -30,7 +39,12 @@ md.use(markdownItMark); // support ==marked== for '<p><mark>marked</mark></p>'
 md.use(markdownItMultimdTable, {
   multiline: true
 });
+md.use(markdownItMetadataBlock, {
+  parseMetadata: yaml.parse,
+  meta: metadata
+});
 // md.use(markdownItFootnote); // why footnotes are not working?
+
 
 const unsplashSearchKeyword = "search:";
 
@@ -85,6 +99,29 @@ function getFirstImageToken (tokens)  {
   return (imgTokenIndex !== -1) ? tokens[imgTokenIndex] : false;
 }
 
+//
+// pre-render token transformation
+// - <a target="_blank"> for external links
+// - (possibly more transformations here in the future)
+//
+function transform(token) {
+  if (token.tag === "a") {
+    if (/^https?:/.test(token.attrGet("href"))) {
+      token.attrSet("target", "_blank");
+    }
+  }
+  return token;
+}
+
+function transformAll(tokens) {
+  tokens.forEach((token) => {
+    transform(token);
+    if (token.children) {
+      transformAll(token.children);
+    }
+  });
+}
+
 class File {
   filename: string;
   extname: string;
@@ -128,6 +165,9 @@ cli
       return;
     }
 
+    // initial metadata based on CLI input
+    metadata.date = options.createdAt;
+
     // configure handlebars
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
     Handlebars.registerHelper('formatDate', (date) => date && format(date, options.dateFormat));
@@ -170,7 +210,7 @@ cli
 
       let wordCount = 0;
 
-      const contentTokens = md.parse(file.contents, undefined);
+      const contentTokens = md.parse(file.contents, {});
       const h1Tokens = contentTokens.filter((token) => token.type === "heading_open" && token.tag === "h1");
       const tokensPerSection = h1Tokens.map((token, i) => {
         const startIndex = contentTokens.indexOf(token);
@@ -229,9 +269,12 @@ cli
       const sections = sidebar[i].tokensPerSection.map((sectionTokens, j) => {
         const firstImageToken = (j === 0) && getFirstImageToken(sectionTokens);
 
+        // transform all tokens!
+        transformAll(sectionTokens);
+
         let rendered = (firstImageToken)
-          ? md.renderer.render(sectionTokens.filter(token => token !== firstImageToken), md.options, undefined)
-          : md.renderer.render(sectionTokens, md.options, undefined);
+          ? md.renderer.render(sectionTokens.filter(token => token !== firstImageToken), md.options, {})
+          : md.renderer.render(sectionTokens, md.options, {});
 
         let id;
 
@@ -250,12 +293,12 @@ cli
         return { rendered, id };
       });
 
-      const tokens = md.parse(file.contents, undefined);
+      const tokens = md.parse(file.contents, {});
       const firstTitleIndex = tokens.findIndex((token) => token.type === "heading_open");
 
       const data = {
         head,
-        date: options.createdAt,
+        metadata,
         isOverview: (sidebar[i].isOverview),
         current: {
           num: sidebar[i].num,
@@ -276,6 +319,8 @@ cli
       };
 
       const html = template(data);
+
+      console.log("METADATA:", metadata);
 
       // write html file into the out directory.
       writeFile(path.resolve(options.out, `${filename}.html`), html);

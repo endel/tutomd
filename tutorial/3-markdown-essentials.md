@@ -9,7 +9,7 @@ If you already know Markdown, you can skip this section.
 # Markdown: the basics
 
 | Element | Markdown Syntax |
-|--|--|
+|---|---|
 | Heading | ```         \
 |         | # H1        \
 |         | ## H2       \

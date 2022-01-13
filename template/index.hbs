@@ -42,7 +42,7 @@
       <div class="section{{#if sections}} current{{/if}} is-overview-{{isOverview}}">
         <div class="info">
           <div class="thumbnail" {{#if hasPreviewImage}} style="background-image: url({{image}}); background-color: transparent;" {{/if}}>
-            <div class="ifont ifont-lrn_icon_finish"></div>
+            <div class="icon lrn_icon_finish"></div>
           </div>
           <div class="data">
             <small>
@@ -88,8 +88,8 @@
               {{#if ../hasPreviewImage}}
                 <img src="{{../image}}" />
               {{/if}}
-              <small><span class="ifont ifont-filled-calendar"></span> {{formatDate ../date}}</small>
-              <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
+              <small><span class="icon filled-calendar"></span> {{formatDate ../metadata.date}}</small>
+              <small><span class="icon filled-time"></span> {{wordCountToMinutes ../wordCount}}</small>
             </div>
             {{/if}}
 
@@ -99,11 +99,11 @@
             <input type="checkbox" id="complete-{{ id }}" name="{{id}}" />
             <div>
               <label class="button" for="complete-{{ id }}">
-                <span class="unchecked">Mark step as completed <div class="ifont ifont-lrn_icon_finish"></div></span>
+                <span class="unchecked">Mark step as completed <div class="icon lrn_icon_finish"></div></span>
                 <span class="checked">Mark step as incomplete</span>
               </label>
 
-              <div class="completion ifont ifont-lrn_icon_finish"></div>
+              <div class="completion icon lrn_icon_finish"></div>
             </div>
             {{/unless}}
           </div>
@@ -140,7 +140,7 @@
           {{/if}}
 
           {{#if next}}
-            <a href="{{next.filename}}.html" class="button">Mark all complete and continue <div class="ifont ifont-lrn_icon_finish"></div></a>
+            <a href="{{next.filename}}.html" class="button">Mark all complete and continue <div class="icon lrn_icon_finish"></div></a>
             <p><a href="{{next.filename}}.html" class="button incomplete">Continue without marking complete</a></p>
           {{else}}
             <p>👏👏👏</p>
@@ -159,8 +159,8 @@
             {{#if sidebar.[0].hasPreviewImage}}
               <img src="{{image}}" />
             {{/if}}
-            <small><span class="ifont ifont-filled-calendar"></span> {{formatDate date}}</small>
-            <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
+            <small><span class="icon filled-calendar"></span> {{formatDate metadata.date}}</small>
+            <small><span class="icon filled-time"></span> {{wordCountToMinutes wordCount}}</small>
           </div>
 
           {{{ sections.[0].rendered }}}
@@ -178,8 +178,8 @@
             <span class="data">
               <h2>{{title}}</h2>
               <p>
-                <small><span class="ifont ifont-lrn_icon_track_course"></span> {{num}}/{{../current.total}}</small>
-                <small><span class="ifont ifont-filled-time"></span> {{wordCountToMinutes wordCount}}</small>
+                <small><span class="icon lrn_icon_track_course"></span> {{num}}/{{../current.total}}</small>
+                <small><span class="icon filled-time"></span> {{wordCountToMinutes wordCount}}</small>
               </p>
             </span>
           </a>
@@ -193,7 +193,7 @@
   </main>
 
   <a href="#summary" class="back-to-top">
-    <div class="ifont ifont-icons-jump-to-top"></div>
+    <div class="icon icons-jump-to-top"></div>
   </a>
 
   {{!-- Syntax highlight --}}
