@@ -32,6 +32,8 @@ iframe {
 }
 
 a { color: var(--link-color) }
+a:hover { color: #59b8f8; }
+
 small { color: var(--secondary-color); }
 table {
   width: 100%;
@@ -231,6 +233,14 @@ h1 strong, h2 strong, h3 strong { color: #000; }
 /* paragraph */
 p { margin-bottom: 24px; }
 p:last-child { margin-bottom: 0; }
+pre + p { padding-top: 1em; }
+
+/* inline code */
+p code, li code {
+  background: #e3e3e3;
+  padding: 0.3em;
+  border-radius: 0.2em;
+}
 
 /* lists */
 ul {
