@@ -13,6 +13,7 @@
   --content-box-shadow: 0 5px 10px 0 rgb(0 0 0 / 10%);
 }
 
+
 /* CSS RESET */
 html { box-sizing: border-box; font-size: 16px; } *, *:before, *:after { box-sizing: inherit; } body, h1, h2, h3, h4, h5, h6, p, ol, ul { margin: 0; padding: 0; font-weight: normal; } ol, ul { list-style: none; } img { max-width: 100%; height: auto; }
 
@@ -63,7 +64,7 @@ aside {
   top: 0;
   color: var(--secondary-color);
   background: #000;
-  z-index: 1;
+  z-index: 3;
   display: block;
   box-sizing: border-box;
   font-size: 12px;
@@ -71,8 +72,9 @@ aside {
   font-weight: 400;
   padding: 2em;
   text-size-adjust: 100%; /* mobile? */
-  width: 365px; /* desktop */
-  height: 100vh;/* desktop */
+  max-width: 365px; /* desktop */
+  max-height: 100vh;/* desktop */
+  overflow: auto;
 }
 aside a {
   color: inherit;
@@ -83,7 +85,7 @@ aside a {
 /* aside .current { font-weight: bold; }  */
 aside a:hover { color: var(--link-color); }
 
-aside .section:not(:first-child) { margin-top: 2em; }
+aside .section:nth-child(n+3) { margin-top: 2em; }
 aside .section:not(:last-child) { margin-bottom: 2em; }
 
 /* fixes multiline sidebar links */
@@ -151,7 +153,11 @@ aside .section .info .thumbnail {
   background-position: center;
   background-size: cover;
   width: 46px;
+  min-width: 46px;
+  max-width: 46px;
   height: 46px;
+  min-height: 46px;
+  max-height: 46px;
   transition: border 0.2s;
   /* centralize "completed" checkmark */
   display: flex;
@@ -210,9 +216,11 @@ body.in-content .back-to-top { opacity: 1; }
 
 main {
   position: relative;
+  display: flex;
+  flex: auto;
   flex-grow: 1;
   flex-shrink: 1;
-  width: 0; /* no idea why this is working... it works, tho... */
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -612,3 +620,54 @@ pre:not([class*="language-"]) {
  * https://github.com/PrismJS/prism-themes/blob/master/themes/prism-vsc-dark-plus.css
  */
 pre[class*="language-"], code[class*="language-"] { color: #d4d4d4; font-size: 13px; text-shadow: none; font-family: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New", monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; -moz-tab-size: 4; -o-tab-size: 4; tab-size: 4; -webkit-hyphens: none; -moz-hyphens: none; -ms-hyphens: none; hyphens: none; } pre[class*="language-"]::selection, code[class*="language-"]::selection, pre[class*="language-"] *::selection, code[class*="language-"] *::selection { text-shadow: none; background: #264F78; } @media print { pre[class*="language-"], code[class*="language-"] { text-shadow: none; } } pre[class*="language-"] { padding: 1em; margin: .5em 0; overflow: auto; background: #1e1e1e; } :not(pre) > code[class*="language-"] { padding: .1em .3em; border-radius: .3em; color: #db4c69; background: #1e1e1e; } /********************************************************* * Tokens */ .namespace { opacity: .7; } .token.doctype .token.doctype-tag { color: #569CD6; } .token.doctype .token.name { color: #9cdcfe; } .token.comment, .token.prolog { color: #6a9955; } .token.punctuation, .language-html .language-css .token.punctuation, .language-html .language-javascript .token.punctuation { color: #d4d4d4; } .token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol, .token.inserted, .token.unit { color: #b5cea8; } .token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.deleted { color: #ce9178; } .language-css .token.string.url { text-decoration: underline; } .token.operator, .token.entity { color: #d4d4d4; } .token.operator.arrow { color: #569CD6; } .token.atrule { color: #ce9178; } .token.atrule .token.rule { color: #c586c0; } .token.atrule .token.url { color: #9cdcfe; } .token.atrule .token.url .token.function { color: #dcdcaa; } .token.atrule .token.url .token.punctuation { color: #d4d4d4; } .token.keyword { color: #569CD6; } .token.keyword.module, .token.keyword.control-flow { color: #c586c0; } .token.function, .token.function .token.maybe-class-name { color: #dcdcaa; } .token.regex { color: #d16969; } .token.important { color: #569cd6; } .token.italic { font-style: italic; } .token.constant { color: #9cdcfe; } .token.class-name, .token.maybe-class-name { color: #4ec9b0; } .token.console { color: #9cdcfe; } .token.parameter { color: #9cdcfe; } .token.interpolation { color: #9cdcfe; } .token.punctuation.interpolation-punctuation { color: #569cd6; } .token.boolean { color: #569cd6; } .token.property, .token.variable, .token.imports .token.maybe-class-name, .token.exports .token.maybe-class-name { color: #9cdcfe; } .token.selector { color: #d7ba7d; } .token.escape { color: #d7ba7d; } .token.tag { color: #569cd6; } .token.tag .token.punctuation { color: #808080; } .token.cdata { color: #808080; } .token.attr-name { color: #9cdcfe; } .token.attr-value, .token.attr-value .token.punctuation { color: #ce9178; } .token.attr-value .token.punctuation.attr-equals { color: #d4d4d4; } .token.entity { color: #569cd6; } .token.namespace { color: #4ec9b0; } /********************************************************* * Language Specific */ pre[class*="language-javascript"], code[class*="language-javascript"], pre[class*="language-jsx"], code[class*="language-jsx"], pre[class*="language-typescript"], code[class*="language-typescript"], pre[class*="language-tsx"], code[class*="language-tsx"] { color: #9cdcfe; } pre[class*="language-css"], code[class*="language-css"] { color: #ce9178; } pre[class*="language-html"], code[class*="language-html"] { color: #d4d4d4; } .language-regex .token.anchor { color: #dcdcaa; } .language-html .token.punctuation { color: #808080; } /********************************************************* * Line highlighting */ pre[class*="language-"] > code[class*="language-"] { position: relative; z-index: 1; } .line-highlight.line-highlight { background: #f7ebc6; box-shadow: inset 5px 0 0 #f7d87c; z-index: 0; }
+
+/*
+ * Media queries
+ */
+@media only screen and (max-width: 1280px) {
+  .centered-content > pre {
+    width: 100%;
+    left: 0;
+  }
+}
+
+aside .toggle { display: none; }
+@media only screen and (max-width: 1080px) {
+  aside {
+    position: fixed;
+    width: 100%;
+    max-width: 100% !important;
+    height: auto;
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.85);
+  }
+  aside input[type="checkbox"] { display: none; }
+  aside .toggle {
+    font-weight: 500;
+    font-size: 1em;
+    display: block;
+    color: #fff;
+    cursor: pointer;
+  }
+  aside .toggle .icon {
+    margin-left: 0.5em;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  aside > div .section {
+    display: none;
+  }
+  aside input[type="checkbox"]:checked + div .toggle {
+    margin-bottom: 2em;
+  }
+  aside input[type="checkbox"]:checked + div .toggle .icon {
+    transform: rotate(180deg);
+  }
+  aside input[type="checkbox"]:checked + div .section {
+    display: block;
+  }
+  .progress-bar-container {
+    top: 64px;
+    left: 0;
+  }
+}

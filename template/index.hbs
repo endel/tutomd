@@ -38,30 +38,36 @@
 
   {{!-- Sidebar --}}
   <aside>
-    {{#each sidebar}}
-      <div class="section{{#if sections}} current{{/if}} is-overview-{{isOverview}}">
-        <div class="info">
-          <div class="thumbnail" {{#if hasPreviewImage}} style="background-image: url({{image}}); background-color: transparent;" {{/if}}>
-            <div class="icon lrn_icon_finish"></div>
+    <input type="checkbox" id="mobile-sidebar-opened" name="mobile-sidebar-opened" />
+    <div>
+      <label class="toggle" for="mobile-sidebar-opened">
+        View Contents <span class="icon icon-arrow-down"></span>
+      </label>
+      {{#each sidebar}}
+        <div class="section{{#if sections}} current{{/if}} is-overview-{{isOverview}}">
+          <div class="info">
+            <div class="thumbnail" {{#if hasPreviewImage}} style="background-image: url({{image}}); background-color: transparent;" {{/if}}>
+              <div class="icon lrn_icon_finish"></div>
+            </div>
+            <div class="data">
+              <small>
+                {{#if isOverview}} Project {{else}} Tutorial {{/if}}
+              </small>
+              <a href="{{filename}}.html">{{title}}</a>
+            </div>
           </div>
-          <div class="data">
-            <small>
-              {{#if isOverview}} Project {{else}} Tutorial {{/if}}
-            </small>
-            <a href="{{filename}}.html">{{title}}</a>
-          </div>
+            {{#unless isOverview}}
+              <ul>
+              {{#if sections}}
+                {{#each sections}}
+                  <li><a href="#{{id}}"><span class="num">{{num}}</span><span class="text">{{title}}</span></a></li>
+                {{/each}}
+              {{/if}}
+              </ul>
+            {{/unless}}
         </div>
-          {{#unless isOverview}}
-            <ul>
-            {{#if sections}}
-              {{#each sections}}
-                <li><a href="#{{id}}"><span class="num">{{num}}</span><span class="text">{{title}}</span></a></li>
-              {{/each}}
-            {{/if}}
-            </ul>
-          {{/unless}}
-      </div>
-    {{/each}}
+      {{/each}}
+    </div>
   </aside>
 
   <main id="summary">
