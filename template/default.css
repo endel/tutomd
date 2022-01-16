@@ -191,6 +191,16 @@ aside .section .info .data {
 aside .section .info .data small { display: block; }
 aside .section .info .icon { display: inline-block; }
 
+/* footer / made with "tutomd" */
+aside footer {
+  border-top: 1px solid hsla(0,0%,100%,.1);
+  padding: 2em;
+}
+aside footer img {
+  position: relative;
+  top: 5px;
+}
+
 .back-to-top {
   position: fixed;
   z-index: 99999;
@@ -642,6 +652,7 @@ pre[class*="language-"], code[class*="language-"] { color: #d4d4d4; font-size: 1
 
 aside .toggle { display: none; }
 @media only screen and (max-width: 1080px) {
+  aside input[type="checkbox"] { display: none; }
   aside {
     position: fixed;
     width: 100%;
@@ -651,7 +662,6 @@ aside .toggle { display: none; }
     background: rgba(0, 0, 0, 0.85);
     padding: 0;
   }
-  aside input[type="checkbox"] { display: none; }
   aside .toggle {
     user-select: none;
     font-weight: 500;
@@ -665,24 +675,17 @@ aside .toggle { display: none; }
   aside .toggle .icon {
     margin-left: 0.5em;
     display: inline-block;
-    transition: transform 0.2s;
+    transition: transform 0.1s;
   }
-  aside > div .contents {
-    display: none;
-  }
-  aside input[type="checkbox"]:checked + div .toggle .icon {
-    transform: rotate(180deg);
-  }
-  aside input[type="checkbox"]:checked + div .contents {
-    display: block;
-  }
+  aside > div footer { display: none; }
+  aside > div .contents { display: none; }
+  aside input[type="checkbox"]:checked + div .contents { display: block; }
+  aside input[type="checkbox"]:checked + div footer { display: block; }
+  aside input[type="checkbox"]:checked + div .toggle .icon { transform: rotate(180deg); }
   .progress-bar-container {
     top: 64px;
-    left: 0;
   }
-
   section.step .completion {
-    top: -40px;
     right: 0;
   }
 }
