@@ -43,6 +43,7 @@
       <label class="toggle" for="mobile-sidebar-opened">
         View Contents <span class="icon icon-arrow-down"></span>
       </label>
+      <div class="contents">
       {{#each sidebar}}
         <div class="section{{#if sections}} current{{/if}} is-overview-{{isOverview}}">
           <div class="info">
@@ -67,6 +68,7 @@
             {{/unless}}
         </div>
       {{/each}}
+      </div>
     </div>
   </aside>
 

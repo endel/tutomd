@@ -70,7 +70,6 @@ aside {
   font-size: 12px;
   line-height: 16px;
   font-weight: 400;
-  padding: 2em;
   text-size-adjust: 100%; /* mobile? */
   max-width: 365px; /* desktop */
   max-height: 100vh;/* desktop */
@@ -79,6 +78,9 @@ aside {
 aside a {
   color: inherit;
   text-decoration: none;
+}
+aside .contents {
+  padding: 2em;
 }
 /* highlight current section */
 /* aside .current { color: #fff; }  */
@@ -438,6 +440,7 @@ section.step img {
 }
 
 .button {
+  user-select: none;
   text-decoration: none;
   cursor: pointer;
   display: block;
@@ -624,10 +627,15 @@ pre[class*="language-"], code[class*="language-"] { color: #d4d4d4; font-size: 1
 /*
  * Media queries
  */
-@media only screen and (max-width: 1280px) {
+/* @media only screen and (max-width: 1280px) { */
+@media only screen and (max-width: 900px) {
+  section { width: 100%; }
   .centered-content > pre {
     width: 100%;
     left: 0;
+  }
+  body {
+    font-size: 14px;
   }
 }
 
@@ -640,34 +648,54 @@ aside .toggle { display: none; }
     height: auto;
     backdrop-filter: blur(8px);
     background: rgba(0, 0, 0, 0.85);
+    padding: 0;
   }
   aside input[type="checkbox"] { display: none; }
   aside .toggle {
+    user-select: none;
     font-weight: 500;
     font-size: 1em;
     display: block;
     color: #fff;
     cursor: pointer;
+    padding: 2em;
+    border-bottom: 1px solid hsla(0,0%,100%,.1);
   }
   aside .toggle .icon {
     margin-left: 0.5em;
     display: inline-block;
     transition: transform 0.2s;
   }
-  aside > div .section {
+  aside > div .contents {
     display: none;
-  }
-  aside input[type="checkbox"]:checked + div .toggle {
-    margin-bottom: 2em;
   }
   aside input[type="checkbox"]:checked + div .toggle .icon {
     transform: rotate(180deg);
   }
-  aside input[type="checkbox"]:checked + div .section {
+  aside input[type="checkbox"]:checked + div .contents {
     display: block;
   }
   .progress-bar-container {
     top: 64px;
     left: 0;
+  }
+
+  section.step .completion {
+    top: -40px;
+    right: 0;
+  }
+}
+
+/* mobile */
+@media only screen and (max-width: 500px) {
+  .summary-header img {
+    display: block;
+    margin-bottom: 1.5em;
+  }
+  section.summary {
+    padding: 1em;
+  }
+  section.step {
+    padding: 2em 1em;
   }
 }
