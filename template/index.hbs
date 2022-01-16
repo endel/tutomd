@@ -52,7 +52,11 @@
             </div>
             <div class="data">
               <small>
-                {{#if isOverview}} Project {{else}} Tutorial {{/if}}
+                {{#if ../metadata.type }}
+                  {{../metadata.type}}
+                {{else}}
+                  {{#if isOverview}} Project {{else}} Tutorial {{/if}}
+                {{/if}}
               </small>
               <a href="{{filename}}.html">{{title}}</a>
             </div>

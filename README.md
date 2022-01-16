@@ -10,14 +10,13 @@
 
 ## Features
 
-- (optional) Tutorial overview
-- Nicely formatted & easy to read/go through
-- Completion status for all steps
-- Sidebar w/ all tutorial steps
-- Visual progress for the reader
-
-> There are still some missing features, such as mobile support. Feel free to
-> check this tool out and suggest improvements.
+- Friendly and intuitive to navigate 💅 (Looks good on mobile, too!)
+- **h1** are the section separators
+  - first **h1** is the page summary
+  - following **h1** are section "steps", with completion status
+- Each `.md` file input is treated as a big step on the sidebar.
+- Sidebar contains all "steps" titles from all files
+- Metadata support through `---` block at the beginning of the file.
 
 ## Installation and usage
 

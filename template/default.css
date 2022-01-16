@@ -682,12 +682,8 @@ aside .toggle { display: none; }
   aside input[type="checkbox"]:checked + div .contents { display: block; }
   aside input[type="checkbox"]:checked + div footer { display: block; }
   aside input[type="checkbox"]:checked + div .toggle .icon { transform: rotate(180deg); }
-  .progress-bar-container {
-    top: 64px;
-  }
-  section.step .completion {
-    right: 0;
-  }
+  .progress-bar-container { top: 64px; }
+  section.step .completion { right: 0; }
 }
 
 /* mobile */
