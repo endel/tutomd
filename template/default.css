@@ -666,7 +666,7 @@ aside .toggle { display: none; }
     max-width: 100% !important;
     height: auto;
     backdrop-filter: blur(8px);
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.92);
     padding: 0;
   }
   aside .toggle {
