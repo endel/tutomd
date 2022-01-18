@@ -1,6 +1,6 @@
 {
   "name": "tutomd",
-  "version": "0.9.15",
+  "version": "0.9.16",
   "description": "Structured tutorial generator",
   "main": "index.js",
   "type": "commonjs",
