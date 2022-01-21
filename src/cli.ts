@@ -172,7 +172,7 @@ class File {
 function getOutputFilename(outDir: string, fromDir: string, file: File) {
   const sourceDir = path.resolve(fromDir);
   const sourcePath = file.fullpath.replace(`${sourceDir}${path.sep}`, "");
-  const outputFilename = path.resolve(outDir, sourcePath);
+  const outputFilename = path.resolve(path.dirname(path.resolve(outDir, sourcePath)), `${file.filename}${file.extname}`);
 
   // make sure output directory exists
   mkdirp.sync(path.dirname(outputFilename));
