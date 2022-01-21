@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build-docs": "ts-node src/index.ts tutorial --unsplash-access-key $UNSPLASH_ACCESS_KEY --out ../endel.dev",
+    "build-docs": "ts-node src/cli.ts tutorial --unsplash-access-key $UNSPLASH_ACCESS_KEY --out ../endel.dev",
     "prepublishOnly": "npm run build"
   },
   "author": "Endel Dreyer",
