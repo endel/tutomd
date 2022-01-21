@@ -146,7 +146,7 @@ class File {
   extname: string;
   num: number;
   contents?: string;
-  constructor(fullpath) {
+  constructor(public fullpath: string) {
     const extname = path.extname(fullpath);
     const filename = path.basename(fullpath, extname);
 
@@ -167,6 +167,17 @@ class File {
 
     this.extname = extname;
   }
+}
+
+function getOutputFilename(outDir: string, fromDir: string, file: File) {
+  const sourceDir = path.resolve(fromDir);
+  const sourcePath = file.fullpath.replace(`${sourceDir}${path.sep}`, "");
+  const outputFilename = path.resolve(outDir, sourcePath);
+
+  // make sure output directory exists
+  mkdirp.sync(path.dirname(outputFilename));
+
+  return outputFilename;
 }
 
 const cli = cac();
@@ -193,10 +204,6 @@ cli
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
     Handlebars.registerHelper('formatDate', (date) => date && format(date, options.dateFormat));
 
-    // create final output directory
-    const outputDir = path.resolve(options.out, path.basename(path.dirname(path.resolve(dir))));
-    mkdirp.sync(outputDir);
-
     const copiedFiles = [];
 
     // copy allFiles (that aren't Markdown) over
@@ -204,9 +211,8 @@ cli
       const file = new File(src);
       copiedFiles.push(`${file.filename}${file.extname}`);
 
-      const destiny = path.resolve(outputDir, `${file.filename}${file.extname}`);
+      const destiny = getOutputFilename(options.out, dir, file);
 
-      console.log("Copying from", colors.yellow(src), "to", colors.green(destiny));
       fs.copyFileSync(src, destiny);
     });
 
@@ -343,22 +349,24 @@ cli
       const html = template(data);
 
       console.log("METADATA:", metadata);
-      // console.log("DATA =>", JSON.parse(JSON.stringify(data)));
 
       // write html file into the out directory.
-      writeFile(path.resolve(outputDir, `${filename}.html`), html);
+      const outputFilename = getOutputFilename(options.out, dir, new File(file.fullpath.replace(/\.md$/, ".html")));
+      writeFile(outputFilename, html);
+
+      /**
+       * Copy the CSS theme over
+       */
+      const themeCSS = fs.readFileSync(options.theme).toString();
+      const iconsCSS = fs.readFileSync(path.resolve(__dirname, "..", "template", "icons.css")).toString();
+      const additionalCSS = options.additionalCSS
+        ? fs.readFileSync(options.additionalCSS).toString()
+        : "";
+
+      writeFile(path.resolve(path.dirname(outputFilename), "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
+
     });
 
-    /**
-     * Copy the CSS theme over
-     */
-    const themeCSS = fs.readFileSync(options.theme).toString();
-    const iconsCSS = fs.readFileSync(path.resolve(__dirname, "..", "template", "icons.css")).toString();
-    const additionalCSS = options.additionalCSS
-      ? fs.readFileSync(options.additionalCSS).toString()
-      : "";
-
-    writeFile(path.resolve(outputDir, "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
   });
 
 // cli
