@@ -41,18 +41,23 @@ tutomd --help
 You should see something similar to this on your terminal:
 
 ```bash
-tutomd/0.9.5
+tutomd/1.0.0
 
 Usage:
-  $ tutomd <command> [options]
+  $ tutomd <dir>
 
 Commands:
-  generate [...files]  Generate tutorial for file
+  <dir>  generate from directory contents
 
 For more info, run any command with the `--help` flag:
   $ tutomd --help
 
 Options:
-  -h, --help     Display this message
-  -v, --version  Display version number
+  --out <dir>                         output directory (default: output)
+  --created-at <timestamp>            tutorial creation date (number of milliseconds since the unix epoch) (default: Fri Jan 21 2022 11:06:14 GMT-0300 (Brasilia Standard Time))
+  --date-format <format>              date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc] (default: MMMM D, YYYY)
+  --theme <css-file>                  theme path (default: /Users/endel/Projects/tutomd/template/default.css)
+  --unsplash-access-key <access-key>  unplash.com api key for generating section thumbnail images
+  -h, --help                          Display this message
+  -v, --version                       Display version number
 ```
