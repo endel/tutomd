@@ -1,6 +1,6 @@
 {
   "name": "tutomd",
-  "version": "0.9.17",
+  "version": "1.0.0",
   "description": "Structured tutorial generator",
   "main": "index.js",
   "type": "commonjs",
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build-docs": "ts-node src/index.ts tutorial/* --unsplash-access-key $UNSPLASH_ACCESS_KEY --out ../endel.dev/tutomd",
+    "build-docs": "ts-node src/index.ts tutorial --unsplash-access-key $UNSPLASH_ACCESS_KEY --out ../endel.dev",
     "prepublishOnly": "npm run build"
   },
   "author": "Endel Dreyer",
@@ -25,6 +25,7 @@
     "colors": "^1.4.0",
     "date-and-time": "^2.1.0",
     "dateformat": "^5.0.2",
+    "fast-glob": "^3.2.11",
     "handlebars": "^4.7.7",
     "markdown-it": "^12.3.0",
     "markdown-it-anchor": "^8.4.1",

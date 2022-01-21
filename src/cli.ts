@@ -2,6 +2,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import cac from "cac";
+import glob from "fast-glob";
 import markdownIt from "markdown-it";
 import Handlebars, { decorators } from "handlebars";
 import mkdirp from 'mkdirp';
@@ -99,6 +100,24 @@ function getFirstImageToken (tokens)  {
   return (imgTokenIndex !== -1) ? tokens[imgTokenIndex] : false;
 }
 
+function recurseAllDirectories(inputFiles: string[]) {
+  let allFiles = [];
+
+  inputFiles.forEach(file => {
+    if (fs.lstatSync(file).isDirectory()) {
+      // recursively read directory files
+      const dirFiles = glob.sync(path.resolve(file, "**"));
+      allFiles = allFiles.concat(recurseAllDirectories(dirFiles));
+
+    } else {
+      // add new file!
+      allFiles.push(path.resolve(file));
+    }
+  });
+
+  return allFiles;
+}
+
 //
 // pre-render token transformation
 // - <a target="_blank"> for external links
@@ -153,17 +172,19 @@ class File {
 const cli = cac();
 
 cli
-  .command('[...files]', 'generate tutorial for file')
+  .command('<dir>', 'generate from directory contents')
   .option("--out <dir>", "output directory", { default: "output" })
   .option("--created-at <timestamp>", "tutorial creation date (number of milliseconds since the unix epoch)", { default: new Date() })
   .option("--date-format <format>", "date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
   .option("--theme <css-file>", "theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
   .option("--unsplash-access-key <access-key>", "unplash.com api key for generating section thumbnail images")
-  .action(async (files, options) => {
-    if (files.length === 0) {
+  .action(async (dir, options) => {
+    if (dir.length === 0) {
       console.error(colors.red("No files provided. Use --help or -h for help."));
       return;
     }
+
+    const allFiles = recurseAllDirectories([dir]);
 
     // initial metadata based on CLI input
     metadata.date = options.createdAt;
@@ -172,35 +193,36 @@ cli
     Handlebars.registerHelper('wordCountToMinutes', (wordCount) => forHumans(Math.max(60, Math.round((wordCount / READING_WORDS_PER_MINUTE) * 60))));
     Handlebars.registerHelper('formatDate', (date) => date && format(date, options.dateFormat));
 
-    // create out directory
-    mkdirp.sync(options.out);
+    // create final output directory
+    const outputDir = path.resolve(options.out, path.basename(path.dirname(path.resolve(dir))));
+    mkdirp.sync(outputDir);
 
     const copiedFiles = [];
 
-    // copy files (that aren't Markdown) over
-    files.filter(file => !file.endsWith(".md")).forEach(src => {
+    // copy allFiles (that aren't Markdown) over
+    allFiles.filter(file => !file.endsWith(".md")).forEach(src => {
       const file = new File(src);
       copiedFiles.push(`${file.filename}${file.extname}`);
 
-      const destiny = path.resolve(options.out, `${file.filename}${file.extname}`);
+      const destiny = path.resolve(outputDir, `${file.filename}${file.extname}`);
 
       console.log("Copying from", colors.yellow(src), "to", colors.green(destiny));
       fs.copyFileSync(src, destiny);
     });
 
     // read custom <head> template
-    const customHeadFile = files.find((file) => file.indexOf("head.html") >= 0);
+    const customHeadFile = allFiles.find((file) => file.indexOf("head.html") >= 0);
     const head = (customHeadFile)
       ? fs.readFileSync(customHeadFile).toString()
       : "";
 
     // only consider markdown (.md) files
-    files = new Map(files.filter(file => file.endsWith(".md")).map((filename) => {
+    const files = new Map(allFiles.filter(file => file.endsWith(".md")).map((filename) => {
       const file = new File(filename);
       return [file.filename, file];
     }));
 
-    const source = fs.readFileSync(path.resolve(__dirname, "..", "template", "index.hbs")).toString();
+    const source = fs.readFileSync(path.resolve(__dirname, "..", "template", "tutorial.hbs")).toString();
     const template = Handlebars.compile(source);
 
     // iterate over each .md file to generate common sidebar data
@@ -321,9 +343,10 @@ cli
       const html = template(data);
 
       console.log("METADATA:", metadata);
+      // console.log("DATA =>", JSON.parse(JSON.stringify(data)));
 
       // write html file into the out directory.
-      writeFile(path.resolve(options.out, `${filename}.html`), html);
+      writeFile(path.resolve(outputDir, `${filename}.html`), html);
     });
 
     /**
@@ -335,8 +358,17 @@ cli
       ? fs.readFileSync(options.additionalCSS).toString()
       : "";
 
-    writeFile(path.resolve(options.out, "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
+    writeFile(path.resolve(outputDir, "theme.css"), `${iconsCSS}${themeCSS}${additionalCSS}`);
   });
+
+// cli
+//   .command('[...files]', 'generate tutorial for file')
+//   .option("--out <dir>", "output directory", { default: "output" })
+//   .option("--created-at <timestamp>", "tutorial creation date (number of milliseconds since the unix epoch)", { default: new Date() })
+//   .option("--date-format <format>", "date format [more info: https://github.com/knowledgecode/date-and-time#formatdateobj-arg-utc]", { default: "MMMM D, YYYY" })
+//   .option("--theme <css-file>", "theme path", { default: path.resolve(__dirname, "..", "template", "default.css") })
+//   .option("--unsplash-access-key <access-key>", "unplash.com api key for generating section thumbnail images")
+//   .action(async (files, options) => {
 
 cli.help();
 cli.version(packageJson.version);
