@@ -196,7 +196,6 @@ cli
     }
 
     const allFiles = recurseAllDirectories([dir]);
-    console.log({ allFiles });
 
     // initial metadata based on CLI input
     metadata.date = options.createdAt;
@@ -348,8 +347,6 @@ cli
       };
 
       const html = template(data);
-
-      console.log("METADATA:", metadata);
 
       // write html file into the out directory.
       const outputFilename = getOutputFilename(options.out, dir, new File(file.fullpath.replace(/\.md$/, ".html")));
