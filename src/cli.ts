@@ -196,6 +196,7 @@ cli
     }
 
     const allFiles = recurseAllDirectories([dir]);
+    console.log({ allFiles });
 
     // initial metadata based on CLI input
     metadata.date = options.createdAt;
@@ -223,9 +224,9 @@ cli
       : "";
 
     // only consider markdown (.md) files
-    const files = new Map(allFiles.filter(file => file.endsWith(".md")).map((filename) => {
+    const files = new Map(allFiles.filter(file => file.endsWith(".md")).map((filename, i) => {
       const file = new File(filename);
-      return [file.filename, file];
+      return [`${i}-${file.filename}`, file];
     }));
 
     const source = fs.readFileSync(path.resolve(__dirname, "..", "template", "tutorial.hbs")).toString();
