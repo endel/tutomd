@@ -106,7 +106,7 @@ function recurseAllDirectories(inputFiles: string[]) {
   inputFiles.forEach(file => {
     if (fs.lstatSync(file).isDirectory()) {
       // recursively read directory files
-      const dirFiles = glob.sync(path.resolve(file, "**"));
+      const dirFiles = glob.sync(path.resolve(file, "**").replace(/\\/gi, "/"));
       allFiles = allFiles.concat(recurseAllDirectories(dirFiles));
 
     } else {

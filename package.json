@@ -1,6 +1,6 @@
 {
   "name": "tutomd",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Structured tutorial generator",
   "main": "index.js",
   "type": "commonjs",
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "build-docs": "ts-node src/cli.ts tutorial --unsplash-access-key $UNSPLASH_ACCESS_KEY --out ../endel.dev",
+    "build-docs": "ts-node src/cli.ts tutorial --unsplash-access-key 7rHOgNNtUFaI2bOY61EyZqooBRHcMToGQEwxaGlwSvY --out output",
     "prepublishOnly": "npm run build"
   },
   "author": "Endel Dreyer",
