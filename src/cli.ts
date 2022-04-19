@@ -225,7 +225,7 @@ cli
     // only consider markdown (.md) files
     const files = new Map(allFiles.filter(file => file.endsWith(".md")).map((filename, i) => {
       const file = new File(filename);
-      return [`${i}-${file.filename}`, file];
+      return [`${file.filename}`, file];
     }));
 
     const source = fs.readFileSync(path.resolve(__dirname, "..", "template", "tutorial.hbs")).toString();
