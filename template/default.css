@@ -583,8 +583,11 @@ body.is-overview-true main > ul a:hover {
 body.is-overview-true main > ul .thumbnail {
   display: inherit;
   width: 40%;
+  min-width: 190px;
+  background-position: center center;
   background-size: cover;
   background-color:rgb(51, 51, 51);
+
 }
 body.is-overview-true main > ul .data {
   width: 60%;
